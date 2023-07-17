@@ -259,7 +259,7 @@ const ProductList = (props) => {
                                 </div>
                             </div>
                             <div className="product-list-wrapper">
-                                <div className="side-product-filter-wrapper">
+                                <div className="product-filter-options-wrapper">
                                     <Accordion>
                                         <AccordionSummary
                                             expandIcon={<ExpandMoreIcon />}

@@ -3,6 +3,8 @@
 ## Description
 This project aims to provide a centralized platform for frequent luxury goods purchasers to buy brand items easily and quickly. The platform is designed to be user-friendly and provide a seamless shopping experience for customers. This project involves creating a collaborative MERN-stack single-page application that utilizes a MongoDB back end, a GraphQL API, Stripe API and an Express.js and Node.js server, as well as a React front end. The application will incorporate user authentication with JWT to create a user-focused platform. Agile development methodologies such as GitHub for code storage, project management tools, and Git branch workflow will be utilized for feature and bug fixes.
 
+You can check out the deployed application from [HERE](https://luxbox-b3b38e53281d.herokuapp.com/).
+
 ## Table of Contents
 
 - [LuxBox MERN App](#luxbox-mern-app)
