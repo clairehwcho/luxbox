@@ -24,7 +24,7 @@ const MainMenu = (props) => {
         <div className="main-menu-wrapper">
             <ul className="main-menu" id="main-menu">
                 <li>
-                    <Link to={undefined} className="main-menu-close-btn link" onClick={closeSideNav}>&times;</Link>
+                    <Link to={undefined} className="menu-close-btn link" onClick={closeSideNav}>&times;</Link>
                 </li>
                 <li>
                     <Link to="/shop/new-in" className="link" onClick={closeSideNav}>New In</Link>

@@ -1,8 +1,9 @@
 const db = require('../config/connection');
-const { User, Product, Category, Color, Designer } = require('../models');
+const { User, Product, Category, Subcategory, Color, Designer } = require('../models');
 
 db.once('open', async () => {
     try {
+        // Seed Color data.
         await Color.deleteMany({});
 
         const colors = await Color.insertMany([
@@ -42,6 +43,7 @@ db.once('open', async () => {
 
         console.log('colors seeded');
 
+        // Seed Designer data.
         await Designer.deleteMany({});
 
         const designers = await Designer.insertMany([
@@ -91,31 +93,102 @@ db.once('open', async () => {
 
         console.log('designers seeded');
 
+        // Seed Category data.
         await Category.deleteMany({});
 
         const categories = await Category.insertMany([
-            {
-                name: "bags"
-            },
-            {
-                name: "beauty"
-            },
-            {
-                name: "clothing"
-            },
-            {
-                name: "home"
-            },
-            {
-                name: "jewelry-and-accessories"
-            },
-            {
-                name: "shoes"
-            }
+            // categories[0]._id
+            { name: "bags" },
+            // categories[1]._id
+            { name: "beauty" },
+            // categories[2]._id
+            { name: "clothing" },
+            // categories[3]._id
+            { name: "home" },
+            // categories[4]._id
+            { name: "jewelry-and-accessories" },
+            // categories[5]._id
+            { name: "shoes" }
         ])
 
         console.log('categories seeded');
 
+        // Seed Subcategory data.
+
+        await Subcategory.deleteMany({});
+
+        const subcategories = await Subcategory.insertMany([
+            // subcategories[0]._id
+            { name: "clutch-bags" },
+            // subcategories[1]._id
+            { name: "cross-body-bags" },
+            // subcategories[2]._id
+            { name: "shoulder-bags" },
+            // subcategories[3]._id
+            { name: "tote-bags" },
+            // subcategories[4]._id
+            { name: "bath-and-body" },
+            // subcategories[5]._id
+            { name: "fragrance" },
+            // subcategories[6]._id
+            { name: "home-fragrance" },
+            // subcategories[7]._id
+            { name: "makeup" },
+            // subcategories[8]._id
+            { name: "skincare" },
+            // subcategories[9]._id
+            { name: "tools-and-devices" },
+            // subcategories[10]._id
+            { name: "wellness" },
+            // subcategories[11]._id
+            { name: "coats" },
+            // subcategories[12]._id
+            { name: "dresses" },
+            // subcategories[13]._id
+            { name: "jackets" },
+            // subcategories[14]._id
+            { name: "skirts" },
+            // subcategories[15]._id
+            { name: "art-and-prints" },
+            // subcategories[16]._id
+            { name: "bowls" },
+            // subcategories[17]._id
+            { name: "candles" },
+            // subcategories[18]._id
+            { name: "jewelry-cases" },
+            // subcategories[19]._id
+            { name: "tableware" },
+            // subcategories[20]._id
+            { name: "throws" },
+            // subcategories[21]._id
+            { name: "vases" },
+            // subcategories[22]._id
+            { name: "bracelets" },
+            // subcategories[23]._id
+            { name: "brooches" },
+            // subcategories[24]._id
+            { name: "earrings" },
+            // subcategories[25]._id
+            { name: "necklaces" },
+            // subcategories[26]._id
+            { name: "watches" },
+            // subcategories[27]._id
+            { name: "boots" },
+            // subcategories[28]._id
+            { name: "heels" },
+            // subcategories[29]._id
+            { name: "loafers" },
+            // subcategories[30]._id
+            { name: "mules" },
+            // subcategories[31]._id
+            { name: "sandals" },
+            // subcategories[32]._id
+            { name: "sneakers" }
+        ])
+
+        console.log('subcategories seeded');
+
+        // Seed Product data.
         await Product.deleteMany({});
 
         const products = await Product.insertMany([
@@ -123,6 +196,7 @@ db.once('open', async () => {
                 image: "01",
                 designer: designers[12]._id,
                 category: categories[0]._id,
+                subcategory: subcategories[2]._id,
                 name: "Caro shoulder bag",
                 price: 3000,
                 color: colors[2]._id,
@@ -135,6 +209,7 @@ db.once('open', async () => {
                 image: "02",
                 designer: designers[12]._id,
                 category: categories[0]._id,
+                subcategory: subcategories[3]._id,
                 name: "Lady-d-Light tote bag",
                 price: 4500,
                 color: colors[0]._id,
@@ -147,6 +222,7 @@ db.once('open', async () => {
                 image: "03",
                 designer: designers[12]._id,
                 category: categories[0]._id,
+                subcategory: subcategories[1]._id,
                 name: "Small lady bag",
                 price: 5600,
                 color: colors[6]._id,
@@ -159,7 +235,8 @@ db.once('open', async () => {
                 image: "04",
                 designer: designers[19]._id,
                 category: categories[0]._id,
-                name: "Roulis bag",
+                subcategory: subcategories[1]._id,
+                name: "Roulis cross-body bag",
                 price: 6000,
                 color: colors[6]._id,
                 quantity: 100,
@@ -171,7 +248,8 @@ db.once('open', async () => {
                 image: "05",
                 designer: designers[19]._id,
                 category: categories[0]._id,
-                name: "Wave bag",
+                subcategory: subcategories[3]._id,
+                name: "Wave tote bag",
                 price: 2500,
                 color: colors[2]._id,
                 quantity: 100,
@@ -183,7 +261,8 @@ db.once('open', async () => {
                 image: "06",
                 designer: designers[19]._id,
                 category: categories[0]._id,
-                name: "Birkin bag",
+                subcategory: subcategories[3]._id,
+                name: "Birkin tote bag",
                 price: 20000,
                 color: colors[3]._id,
                 quantity: 100,
@@ -195,7 +274,8 @@ db.once('open', async () => {
                 image: "07",
                 designer: designers[33]._id,
                 category: categories[0]._id,
-                name: "Kristen bag",
+                subcategory: subcategories[3]._id,
+                name: "Kristen tote bag",
                 price: 3600,
                 color: colors[12]._id,
                 quantity: 100,
@@ -207,7 +287,8 @@ db.once('open', async () => {
                 image: "08",
                 designer: designers[33]._id,
                 category: categories[0]._id,
-                name: "Re-edition 2005 saffiano bag",
+                subcategory: subcategories[1]._id,
+                name: "Re-edition 2005 saffiano cross-body bag",
                 price: 2550,
                 color: colors[6]._id,
                 quantity: 100,
@@ -219,7 +300,8 @@ db.once('open', async () => {
                 image: "09",
                 designer: designers[33]._id,
                 category: categories[0]._id,
-                name: "Symbole bag",
+                subcategory: subcategories[3]._id,
+                name: "Symbole tote bag",
                 price: 2550,
                 color: colors[0]._id,
                 quantity: 100,
@@ -231,7 +313,8 @@ db.once('open', async () => {
                 image: "10",
                 designer: designers[39]._id,
                 category: categories[0]._id,
-                name: "Mini hector bag",
+                subcategory: subcategories[0]._id,
+                name: "Mini hector clutch bag",
                 price: 2215,
                 color: colors[5]._id,
                 quantity: 100,
@@ -243,6 +326,7 @@ db.once('open', async () => {
                 image: "01",
                 designer: designers[7]._id,
                 category: categories[2]._id,
+                subcategory: subcategories[13]._id,
                 name: "Bead-embellished shearling-lined leather jacket",
                 price: 1200,
                 color: colors[6]._id,
@@ -255,6 +339,7 @@ db.once('open', async () => {
                 image: "02",
                 designer: designers[10]._id,
                 category: categories[2]._id,
+                subcategory: subcategories[13]._id,
                 name: "Belted shearling vest",
                 price: 900,
                 color: colors[0]._id,
@@ -267,6 +352,7 @@ db.once('open', async () => {
                 image: "03",
                 designer: designers[10]._id,
                 category: categories[2]._id,
+                subcategory: subcategories[12]._id,
                 name: "Fringed macramé leather midi dress",
                 price: 1400,
                 color: colors[12]._id,
@@ -279,6 +365,7 @@ db.once('open', async () => {
                 image: "04",
                 designer: designers[17]._id,
                 category: categories[2]._id,
+                subcategory: subcategories[12]._id,
                 name: "Embellished crepe midi dress",
                 price: 1650,
                 color: colors[1]._id,
@@ -291,6 +378,7 @@ db.once('open', async () => {
                 image: "05",
                 designer: designers[31]._id,
                 category: categories[2]._id,
+                subcategory: subcategories[12]._id,
                 name: "Strapless appliquéd shell mini dress",
                 price: 2300,
                 color: colors[14]._id,
@@ -303,6 +391,7 @@ db.once('open', async () => {
                 image: "06",
                 designer: designers[34]._id,
                 category: categories[2]._id,
+                subcategory: subcategories[11]._id,
                 name: "Faux fur coat",
                 price: 3999,
                 color: colors[1]._id,
@@ -315,6 +404,7 @@ db.once('open', async () => {
                 image: "07",
                 designer: designers[38]._id,
                 category: categories[2]._id,
+                subcategory: subcategories[11]._id,
                 name: "Agathon belted quilted leather coat",
                 price: 2699,
                 color: colors[0]._id,
@@ -327,6 +417,7 @@ db.once('open', async () => {
                 image: "08",
                 designer: designers[40]._id,
                 category: categories[2]._id,
+                subcategory: subcategories[12]._id,
                 name: "Strapless silk gown dress",
                 price: 1599,
                 color: colors[12]._id,
@@ -339,6 +430,7 @@ db.once('open', async () => {
                 image: "09",
                 designer: designers[41]._id,
                 category: categories[2]._id,
+                subcategory: subcategories[12]._id,
                 name: "Cutout crystal-embellished silk-cady gown dress",
                 price: 4500,
                 color: colors[12]._id,
@@ -351,6 +443,7 @@ db.once('open', async () => {
                 image: "10",
                 designer: designers[41]._id,
                 category: categories[2]._id,
+                subcategory: subcategories[14]._id,
                 name: "Sequined tulle maxi skirt",
                 price: 2500,
                 color: colors[4]._id,
@@ -363,6 +456,7 @@ db.once('open', async () => {
                 image: "11",
                 designer: designers[1]._id,
                 category: categories[3]._id,
+                subcategory: subcategories[20]._id,
                 name: "Explosion Nature fringed cotton-blend jacquard blanket",
                 price: 1500,
                 color: colors[6]._id,
@@ -375,6 +469,7 @@ db.once('open', async () => {
                 image: "12",
                 designer: designers[3]._id,
                 category: categories[3]._id,
+                subcategory: subcategories[21]._id,
                 name: "Vase",
                 price: 400,
                 color: colors[12]._id,
@@ -387,6 +482,7 @@ db.once('open', async () => {
                 image: "13",
                 designer: designers[5]._id,
                 category: categories[3]._id,
+                subcategory: subcategories[18]._id,
                 name: "Eyes textured-leather watch box",
                 price: 600,
                 color: colors[1]._id,
@@ -399,6 +495,7 @@ db.once('open', async () => {
                 image: "14",
                 designer: designers[6]._id,
                 category: categories[3]._id,
+                subcategory: subcategories[15]._id,
                 name: "Guy Bourdin framed print",
                 price: 900,
                 color: colors[1]._id,
@@ -411,6 +508,7 @@ db.once('open', async () => {
                 image: "15",
                 designer: designers[7]._id,
                 category: categories[3]._id,
+                subcategory: subcategories[20]._id,
                 name: "Fringed cashmere travel blanket",
                 price: 1500,
                 color: colors[12]._id,
@@ -423,6 +521,7 @@ db.once('open', async () => {
                 image: "16",
                 designer: designers[7]._id,
                 category: categories[3]._id,
+                subcategory: subcategories[19]._id,
                 name: "Set of three stone plates",
                 price: 300,
                 color: colors[0]._id,
@@ -435,6 +534,7 @@ db.once('open', async () => {
                 image: "17",
                 designer: designers[27]._id,
                 category: categories[3]._id,
+                subcategory: subcategories[16]._id,
                 name: "Medium porcelain bowl",
                 price: 650,
                 color: colors[12]._id,
@@ -447,6 +547,7 @@ db.once('open', async () => {
                 image: "18",
                 designer: designers[24]._id,
                 category: categories[3]._id,
+                subcategory: subcategories[19]._id,
                 name: "Set of six gold-plated porcelain dessert plates",
                 price: 600,
                 color: colors[6]._id,
@@ -459,6 +560,7 @@ db.once('open', async () => {
                 image: "19",
                 designer: designers[29]._id,
                 category: categories[3]._id,
+                subcategory: subcategories[17]._id,
                 name: "Cucumber large scented candle, 2120g",
                 price: 150,
                 color: colors[6]._id,
@@ -471,6 +573,7 @@ db.once('open', async () => {
                 image: "20",
                 designer: designers[36]._id,
                 category: categories[3]._id,
+                subcategory: subcategories[19]._id,
                 name: "Macchia su Macchia set of six Murano glass tumblers",
                 price: 200,
                 color: colors[14]._id,
@@ -483,6 +586,7 @@ db.once('open', async () => {
                 image: "21",
                 designer: designers[4]._id,
                 category: categories[4]._id,
+                subcategory: subcategories[25]._id,
                 name: "18-karat gold, diamond and emerald necklace",
                 price: 45000,
                 color: colors[4]._id,
@@ -495,6 +599,7 @@ db.once('open', async () => {
                 image: "22",
                 designer: designers[9]._id,
                 category: categories[4]._id,
+                subcategory: subcategories[26]._id,
                 name: "Tank Française 32mm medium 18-karat gold diamond watch",
                 price: 26000,
                 color: colors[4]._id,
@@ -507,6 +612,7 @@ db.once('open', async () => {
                 image: "23",
                 designer: designers[11]._id,
                 category: categories[4]._id,
+                subcategory: subcategories[26]._id,
                 name: "Happy Sport Automatic 33mm 18-karat rose gold, stainless steel and diamond watch",
                 price: 13500,
                 color: colors[11]._id,
@@ -519,6 +625,7 @@ db.once('open', async () => {
                 image: "24",
                 designer: designers[15]._id,
                 category: categories[4]._id,
+                subcategory: subcategories[24]._id,
                 name: "Silver-tone, crystal and glass earrings",
                 price: 535,
                 color: colors[11]._id,
@@ -531,7 +638,8 @@ db.once('open', async () => {
                 image: "25",
                 designer: designers[16]._id,
                 category: categories[4]._id,
-                name: "Oversized Strong Hearts 18-karat gold necklace",
+                subcategory: subcategories[25]._id,
+                name: "Oversized strong hearts 18-karat gold necklace",
                 price: 1650,
                 color: colors[4]._id,
                 quantity: 100,
@@ -543,6 +651,7 @@ db.once('open', async () => {
                 image: "26",
                 designer: designers[18]._id,
                 category: categories[4]._id,
+                subcategory: subcategories[24]._id,
                 name: "Gold-tone and crystal earrings",
                 price: 1300,
                 color: colors[1]._id,
@@ -555,7 +664,8 @@ db.once('open', async () => {
                 image: "27",
                 designer: designers[21]._id,
                 category: categories[4]._id,
-                name: "Swing Hoops 18-karat yellow and white gold, turquoise and diamond earrings",
+                subcategory: subcategories[24]._id,
+                name: "Swing hoops 18-karat yellow and white gold, turquoise and diamond earrings",
                 price: 11999,
                 color: colors[2]._id,
                 quantity: 100,
@@ -567,6 +677,7 @@ db.once('open', async () => {
                 image: "28",
                 designer: designers[28]._id,
                 category: categories[4]._id,
+                subcategory: subcategories[23]._id,
                 name: "Gold-tone brooch",
                 price: 500,
                 color: colors[4]._id,
@@ -579,6 +690,7 @@ db.once('open', async () => {
                 image: "29",
                 designer: designers[32]._id,
                 category: categories[4]._id,
+                subcategory: subcategories[22]._id,
                 name: "Nudo 18-karat rose gold, diamond and topaz cuff",
                 price: 4500,
                 color: colors[4]._id,
@@ -591,6 +703,7 @@ db.once('open', async () => {
                 image: "30",
                 designer: designers[37]._id,
                 category: categories[4]._id,
+                subcategory: subcategories[24]._id,
                 name: "14-karat gold, emerald and diamond hoop earrings",
                 price: 4500,
                 color: colors[4]._id,
@@ -603,6 +716,7 @@ db.once('open', async () => {
                 image: "01",
                 designer: designers[0]._id,
                 category: categories[1]._id,
+                subcategory: subcategories[4]._id,
                 name: "Resurrection aromatique hand wash",
                 price: 41,
                 color: colors[15]._id,
@@ -615,6 +729,7 @@ db.once('open', async () => {
                 image: "02",
                 designer: designers[0]._id,
                 category: categories[1]._id,
+                subcategory: subcategories[9]._id,
                 name: "Cellreturn platinum led face mask",
                 price: 2100,
                 color: colors[15]._id,
@@ -627,7 +742,8 @@ db.once('open', async () => {
                 image: "03",
                 designer: designers[8]._id,
                 category: categories[1]._id,
-                name: "Young rose",
+                subcategory: subcategories[5]._id,
+                name: "Young rose perfume",
                 price: 290,
                 color: colors[15]._id,
                 quantity: 100,
@@ -639,7 +755,8 @@ db.once('open', async () => {
                 image: "04",
                 designer: designers[14]._id,
                 category: categories[1]._id,
-                name: "Tuberose",
+                subcategory: subcategories[6]._id,
+                name: "Tuberose candle",
                 price: 190,
                 color: colors[15]._id,
                 quantity: 100,
@@ -651,6 +768,7 @@ db.once('open', async () => {
                 image: "05",
                 designer: designers[20]._id,
                 category: categories[1]._id,
+                subcategory: subcategories[7]._id,
                 name: "Vegan travel brush set",
                 price: 320,
                 color: colors[15]._id,
@@ -663,7 +781,8 @@ db.once('open', async () => {
                 image: "06",
                 designer: designers[23]._id,
                 category: categories[1]._id,
-                name: "English pear & freesia",
+                subcategory: subcategories[6]._id,
+                name: "English pear & freesia candle",
                 price: 75,
                 color: colors[15]._id,
                 quantity: 100,
@@ -675,7 +794,8 @@ db.once('open', async () => {
                 image: "07",
                 designer: designers[25]._id,
                 category: categories[1]._id,
-                name: "The moisturizing soft cream",
+                subcategory: subcategories[8]._id,
+                name: "Moisturizing soft cream",
                 price: 380,
                 color: colors[15]._id,
                 quantity: 100,
@@ -687,6 +807,7 @@ db.once('open', async () => {
                 image: "08",
                 designer: designers[26]._id,
                 category: categories[1]._id,
+                subcategory: subcategories[8]._id,
                 name: "Platinum rare cellular night elixir",
                 price: 1460,
                 color: colors[15]._id,
@@ -699,6 +820,7 @@ db.once('open', async () => {
                 image: "09",
                 designer: designers[30]._id,
                 category: categories[1]._id,
+                subcategory: subcategories[8]._id,
                 name: "Hydro-bright gold eye mask",
                 price: 105,
                 color: colors[15]._id,
@@ -711,7 +833,8 @@ db.once('open', async () => {
                 image: "10",
                 designer: designers[35]._id,
                 category: categories[1]._id,
-                name: "Silk Pillowcase",
+                subcategory: subcategories[10]._id,
+                name: "Silk pillowcase",
                 price: 89,
                 color: colors[15]._id,
                 quantity: 100,
@@ -723,7 +846,8 @@ db.once('open', async () => {
                 image: "01",
                 designer: designers[19]._id,
                 category: categories[5]._id,
-                name: "Carlotta Mule",
+                subcategory: subcategories[30]._id,
+                name: "Carlotta mules",
                 price: 1250,
                 color: colors[0]._id,
                 quantity: 100,
@@ -735,6 +859,7 @@ db.once('open', async () => {
                 image: "02",
                 designer: designers[19]._id,
                 category: categories[5]._id,
+                subcategory: subcategories[31]._id,
                 name: "Cypher sandals",
                 price: 890,
                 color: colors[1]._id,
@@ -747,6 +872,7 @@ db.once('open', async () => {
                 image: "03",
                 designer: designers[13]._id,
                 category: categories[5]._id,
+                subcategory: subcategories[29]._id,
                 name: "Boy loafers",
                 price: 2400,
                 color: colors[6]._id,
@@ -759,6 +885,7 @@ db.once('open', async () => {
                 image: "04",
                 designer: designers[13]._id,
                 category: categories[5]._id,
+                subcategory: subcategories[29]._id,
                 name: "Black loafers",
                 price: 3200,
                 color: colors[1]._id,
@@ -771,6 +898,7 @@ db.once('open', async () => {
                 image: "05",
                 designer: designers[19]._id,
                 category: categories[5]._id,
+                subcategory: subcategories[31]._id,
                 name: "Gipsy sandals",
                 price: 760,
                 color: colors[10]._id,
@@ -783,7 +911,8 @@ db.once('open', async () => {
                 image: "06",
                 designer: designers[19]._id,
                 category: categories[5]._id,
-                name: "Groupie Mule",
+                subcategory: subcategories[30]._id,
+                name: "Groupie mules",
                 price: 1100,
                 color: colors[12]._id,
                 quantity: 100,
@@ -795,7 +924,8 @@ db.once('open', async () => {
                 image: "07",
                 designer: designers[2]._id,
                 category: categories[5]._id,
-                name: "Storm ankel boots",
+                subcategory: subcategories[27]._id,
+                name: "Storm ankle boots",
                 price: 1700,
                 color: colors[1]._id,
                 quantity: 100,
@@ -807,6 +937,7 @@ db.once('open', async () => {
                 image: "08",
                 designer: designers[22]._id,
                 category: categories[5]._id,
+                subcategory: subcategories[28]._id,
                 name: "Josefine 100 heels",
                 price: 2100,
                 color: colors[1]._id,
@@ -819,7 +950,8 @@ db.once('open', async () => {
                 image: "09",
                 designer: designers[22]._id,
                 category: categories[5]._id,
-                name: "Josefine 100",
+                subcategory: subcategories[28]._id,
+                name: "Josefine 100 heels",
                 price: 2100,
                 color: colors[12]._id,
                 quantity: 100,
@@ -831,7 +963,8 @@ db.once('open', async () => {
                 image: "10",
                 designer: designers[13]._id,
                 category: categories[5]._id,
-                name: "Walk'n'Dior high-tops",
+                subcategory: subcategories[32]._id,
+                name: "Walk'n'Dior high-top sneakers",
                 price: 3200,
                 color: colors[1]._id,
                 quantity: 100,
@@ -843,6 +976,7 @@ db.once('open', async () => {
 
         console.log('products seeded');
 
+        // Seed User data.
         await User.deleteMany({});
 
         await User.create({

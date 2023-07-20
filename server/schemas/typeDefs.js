@@ -8,6 +8,11 @@ const typeDefs = gql`
     name: String
   }
 
+  type Subcategory {
+    _id: ID
+    name: String
+  }
+
   type Color {
     _id: ID
     name: String
@@ -24,6 +29,7 @@ const typeDefs = gql`
     name: String
     designer: Designer
     category: Category
+    subcategory: Subcategory
     color: Color
     quantity: Int
     price: Float
@@ -59,9 +65,10 @@ const typeDefs = gql`
   # Define which queries the front end is allowed to make and what data is returned
   type Query {
     categories: [Category]
+    subcategories: [Subcategory]
     colors: [Color]
     designers: [Designer]
-    products(category: ID, color: ID, designer: ID, name: String): [Product]
+    products(category: ID, subcategory: ID, color: ID, designer: ID, name: String): [Product]
     product(_id: ID!): Product
     user: User
     order(_id: ID!): Order

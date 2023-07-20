@@ -21,17 +21,23 @@ import {
 import { idbPromise, formatCategoryName, flattenObj } from '../../../utils/helpers';
 
 import ProductCard from '../../../components/Product/ProductCard';
+import ProductCategoryFilter from '../../../components/Product/ProductCategoryFilter';
 import NotFound from '../../../components/Product/NotFound';
 
 import FilterListIcon from '@mui/icons-material/FilterList';
+import CloseIcon from '@mui/icons-material/Close';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import NativeSelect from '@mui/material/NativeSelect';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
+import Typography from '@mui/material/Typography';
 
 const ProductList = (props) => {
+
     const [sortState, setSortState] = useState('newest');
+    const [productFilterMenuWidthState, setProductFilterMenuWidthState] = useState('0');
+
 
     const { categoryParam, searchInputParam, designerParam, colorParam } = useParams();
 
@@ -214,6 +220,26 @@ const ProductList = (props) => {
         return (Math.ceil(price * 0.8));
     };
 
+
+    const [expandedState, setExpandedState] = useState('false');
+
+    const handleFilterMenuChange = (panel) => (event, isExpanded) => {
+        setExpandedState(isExpanded ? panel : false);
+    };
+
+    useEffect(() => {
+        document.getElementById("collapsible-product-filter-menu-wrapper").style.width = productFilterMenuWidthState;
+    }, [productFilterMenuWidthState]);
+
+    const openProductFilterMenu = () => {
+        setProductFilterMenuWidthState('100%');
+    }
+
+    const closeProductFilterMenu = () => {
+        setProductFilterMenuWidthState('0');
+    }
+
+
     return (
         <section className="main-content-container">
             <div className="main-content-row">
@@ -232,7 +258,71 @@ const ProductList = (props) => {
                         <Fragment>
                             <div className="product-filter-and-sort-wrapper">
                                 <div className="product-filter-wrapper">
-                                    <div className="collapsible-product-filter">
+                                    <div id="collapsible-product-filter-menu-wrapper">
+                                        <Accordion disableGutters="true">
+                                            <AccordionSummary>
+                                                <Typography
+                                                    sx={{
+                                                        width: '100%'
+                                                    }}
+                                                >
+                                                    FILTER
+                                                </Typography>
+                                                <CloseIcon onClick={closeProductFilterMenu} />
+                                            </AccordionSummary>
+                                        </Accordion>
+                                        <Accordion
+                                            disableGutters="true"
+                                            expanded={expandedState === 'panel1'}
+                                            onChange={handleFilterMenuChange('panel1')}
+                                        >
+                                            <AccordionSummary
+                                                expandIcon={<ExpandMoreIcon />}
+                                                aria-controls="panel1a-content"
+                                                id="panel1a-header"
+                                            >
+                                                <Typography>CATEGORY</Typography>
+                                            </AccordionSummary>
+                                            <AccordionDetails>
+                                                <ProductCategoryFilter categoryParam={props.category} />
+                                            </AccordionDetails>
+                                        </Accordion>
+                                        <Accordion
+                                            disableGutters="true"
+                                            expanded={expandedState === 'panel2'}
+                                            onChange={handleFilterMenuChange('panel2')}
+                                        >
+                                            <AccordionSummary
+                                                expandIcon={<ExpandMoreIcon />}
+                                                aria-controls="panel2a-content"
+                                                id="panel2a-header"
+                                            >
+                                                <Typography>DESIGNER</Typography>
+                                            </AccordionSummary>
+                                            <AccordionDetails>
+                                            </AccordionDetails>
+                                        </Accordion>
+                                        <Accordion
+                                            disableGutters="true"
+                                            expanded={expandedState === 'panel3'}
+                                            onChange={handleFilterMenuChange('panel3')}
+                                        >
+                                            <AccordionSummary
+                                                expandIcon={<ExpandMoreIcon />}
+                                                aria-controls="panel3a-content"
+                                                id="panel3a-header"
+                                            >
+                                                <Typography>COLOR</Typography>
+                                            </AccordionSummary>
+                                            <AccordionDetails>
+                                            </AccordionDetails>
+                                        </Accordion>
+                                        <div className="product-filter-button-wrapper">
+                                            <button className="outlined-btn">Clear All</button>
+                                            <button className="filled-btn">Apply</button>
+                                        </div>
+                                    </div>
+                                    <div className="product-filter-icon-wrapper" onClick={openProductFilterMenu}>
                                         <FilterListIcon /><span>Filter</span>
                                     </div>
                                     <span className="product-result-num"> {filterProducts().length} Results </span>
@@ -259,79 +349,51 @@ const ProductList = (props) => {
                                 </div>
                             </div>
                             <div className="product-list-wrapper">
-                                <div className="product-filter-options-wrapper">
-                                    <Accordion>
+                                <div className="product-filter-menu-wrapper">
+                                    <Accordion
+                                        disableGutters="true"
+                                        expanded={expandedState === 'panel1'}
+                                        onChange={handleFilterMenuChange('panel1')}
+                                    >
                                         <AccordionSummary
                                             expandIcon={<ExpandMoreIcon />}
                                             aria-controls="panel1a-content"
                                             id="panel1a-header"
                                         >
-                                            <p>CATEGORY</p>
+                                            <Typography>CATEGORY</Typography>
                                         </AccordionSummary>
                                         <AccordionDetails>
-                                            <ul>
-                                                <li>
-                                                    <Link to="/shop/clothing" className="link">
-                                                        Clothing
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link to="/shop/shoes" className="link">
-                                                        Shoes
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link to="/shop/bags" className="link">
-                                                        Bags
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link to="/shop/jewelry-and-accessories" className="link">
-                                                        Jewelry & Accessories
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link to="/shop/beauty" className="link">
-                                                        Beauty
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link to="/shop/home" className="link">
-                                                        Home
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link to="/shop/sale" className="link">
-                                                        Sale
-                                                    </Link>
-                                                </li>
-                                            </ul>
+                                            <ProductCategoryFilter category={categoryParam} />
                                         </AccordionDetails>
                                     </Accordion>
-                                    <Accordion>
+                                    <Accordion
+                                        disableGutters="true"
+                                        expanded={expandedState === 'panel2'}
+                                        onChange={handleFilterMenuChange('panel2')}
+                                    >
                                         <AccordionSummary
                                             expandIcon={<ExpandMoreIcon />}
                                             aria-controls="panel2a-content"
                                             id="panel2a-header"
                                         >
-                                            <p>DESIGNER</p>
+                                            <Typography>DESIGNER</Typography>
                                         </AccordionSummary>
                                         <AccordionDetails>
-                                            <p>
-                                            </p>
                                         </AccordionDetails>
                                     </Accordion>
-                                    <Accordion>
+                                    <Accordion
+                                        disableGutters="true"
+                                        expanded={expandedState === 'panel3'}
+                                        onChange={handleFilterMenuChange('panel3')}
+                                    >
                                         <AccordionSummary
                                             expandIcon={<ExpandMoreIcon />}
                                             aria-controls="panel3a-content"
                                             id="panel3a-header"
                                         >
-                                            <p>COLOR</p>
+                                            <Typography>COLOR</Typography>
                                         </AccordionSummary>
                                         <AccordionDetails>
-                                            <p>
-                                            </p>
                                         </AccordionDetails>
                                     </Accordion>
                                 </div>

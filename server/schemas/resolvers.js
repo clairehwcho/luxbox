@@ -1,5 +1,5 @@
 const { AuthenticationError } = require('apollo-server-express');
-const { User, Product, Category, Color, Designer, Order } = require('../models');
+const { User, Product, Category, Subcategory, Color, Designer, Order } = require('../models');
 const { signToken } = require('../utils/auth');
 const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
@@ -12,17 +12,24 @@ const resolvers = {
         categories: async () => {
             return await Category.find();
         },
+        subcategories: async () => {
+            return await Subcategory.find();
+        },
         colors: async () => {
             return await Color.find();
         },
         designers: async () => {
             return await Designer.find();
         },
-        products: async (parent, { category, color, designer, name }) => {
+        products: async (parent, { category, subcategory, color, designer, name }) => {
             const params = {};
 
             if (category) {
                 params.category = category;
+            }
+
+            if (subcategory) {
+                params.subcategory = subcategory;
             }
 
             if (color) {
@@ -39,10 +46,10 @@ const resolvers = {
                 };
             }
 
-            return await Product.find(params).populate('category').populate('color').populate('designer');
+            return await Product.find(params).populate('category').populate('subcategory').populate('color').populate('designer');
         },
         product: async (parent, { _id }) => {
-            return await Product.findById(_id).populate('category').populate('color').populate('designer');
+            return await Product.findById(_id).populate('category').populate('subcategory').populate('color').populate('designer');
         },
         user: async (parent, args, context) => {
             if (context.user) {
