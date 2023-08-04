@@ -1,4 +1,4 @@
-const { gql } = require('apollo-server-express');
+import { gql } from 'apollo-server-express';
 
 const typeDefs = gql`
   # Define which fields are accessible from the model
@@ -11,6 +11,7 @@ const typeDefs = gql`
   type Subcategory {
     _id: ID
     name: String
+    category: Category
   }
 
   type Color {
@@ -86,4 +87,4 @@ const typeDefs = gql`
   }
   `;
 
-module.exports = typeDefs;
+export default typeDefs;

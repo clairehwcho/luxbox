@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 import MainMenu from './MainMenu';
 import AccountMenu from './AccountMenu';
-import SearchBar from '../SearchBar';
+import SearchBar from './SearchBar';
 
 const Navigation = (props) => {
     return (

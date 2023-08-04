@@ -9,8 +9,8 @@ import RegisterIcon from '@mui/icons-material/PersonAddAlt';
 import WishlistIcon from '@mui/icons-material/FavoriteBorder';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBagOutlined';
 
-import { QUERY_USER } from '../../../../../utils/queries';
-import Auth from '../../../../../utils/auth';
+import { QUERY_USER } from '../../../../utils/queries';
+import Auth from '../../../../utils/auth';
 
 const AccountMenu = (props) => {
 

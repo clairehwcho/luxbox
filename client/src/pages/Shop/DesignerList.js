@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-import AlphabetList from '../../../utils/AlphabetList';
+import AlphabetList from '../../utils/AlphabetList';
 
 import { useQuery } from '@apollo/client';
-import { useStoreContext } from '../../../utils/GlobalState';
-import { UPDATE_DESIGNERS, } from '../../../utils/actions';
-import { QUERY_DESIGNERS, } from '../../../utils/queries';
-import { idbPromise } from '../../../utils/helpers';
+import { useStoreContext } from '../../utils/GlobalState';
+import { UPDATE_DESIGNERS, } from '../../utils/actions';
+import { QUERY_DESIGNERS, } from '../../utils/queries';
+import { idbPromise } from '../../utils/helpers';
 
 const DesignerList = (props) => {
     const [state, dispatch] = useStoreContext();
@@ -18,7 +18,7 @@ const DesignerList = (props) => {
         if (designerData) {
             dispatch({
                 type: UPDATE_DESIGNERS,
-                designers: designerData.designers,
+                payload: designerData.designers,
             });
             designerData.designers.forEach((product) => {
                 idbPromise('designers', 'put', product);
@@ -27,7 +27,7 @@ const DesignerList = (props) => {
             idbPromise('designers', 'get').then((designers) => {
                 dispatch({
                     type: UPDATE_DESIGNERS,
-                    designers: designers,
+                    payload: designers,
                 });
             });
         }
@@ -39,7 +39,7 @@ const DesignerList = (props) => {
     return (
         <section className="main-content-container">
             <div className="main-content-row">
-                <h3>{props.category}</h3>
+                <h3>Designers</h3>
             </div>
             <div className="main-content-row">
                 <div className="designer-list-content-wrapper">

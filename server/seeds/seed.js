@@ -1,7 +1,7 @@
-const db = require('../config/connection');
-const { User, Product, Category, Subcategory, Color, Designer } = require('../models');
+import db from "../config/connection.js";
+import { User, Product, Category, Subcategory, Color, Designer } from "../models/index.js";
 
-db.once('open', async () => {
+db.once("open", async () => {
     try {
         // Seed Color data.
         await Color.deleteMany({});
@@ -119,71 +119,71 @@ db.once('open', async () => {
 
         const subcategories = await Subcategory.insertMany([
             // subcategories[0]._id
-            { name: "clutch-bags" },
+            { name: "clutch-bags", category: categories[0]._id },
             // subcategories[1]._id
-            { name: "cross-body-bags" },
+            { name: "cross-body-bags", category: categories[0]._id },
             // subcategories[2]._id
-            { name: "shoulder-bags" },
+            { name: "shoulder-bags", category: categories[0]._id },
             // subcategories[3]._id
-            { name: "tote-bags" },
+            { name: "tote-bags", category: categories[0]._id },
             // subcategories[4]._id
-            { name: "bath-and-body" },
+            { name: "bath-and-body", category: categories[0]._id },
             // subcategories[5]._id
-            { name: "fragrance" },
+            { name: "fragrance", category: categories[1]._id },
             // subcategories[6]._id
-            { name: "home-fragrance" },
+            { name: "home-fragrance", category: categories[1]._id },
             // subcategories[7]._id
-            { name: "makeup" },
+            { name: "makeup", category: categories[1]._id },
             // subcategories[8]._id
-            { name: "skincare" },
+            { name: "skincare", category: categories[1]._id },
             // subcategories[9]._id
-            { name: "tools-and-devices" },
+            { name: "tools-and-devices", category: categories[1]._id },
             // subcategories[10]._id
-            { name: "wellness" },
+            { name: "wellness", category: categories[1]._id },
             // subcategories[11]._id
-            { name: "coats" },
+            { name: "coats", category: categories[2]._id },
             // subcategories[12]._id
-            { name: "dresses" },
+            { name: "dresses", category: categories[2]._id },
             // subcategories[13]._id
-            { name: "jackets" },
+            { name: "jackets", category: categories[2]._id },
             // subcategories[14]._id
-            { name: "skirts" },
+            { name: "skirts", category: categories[2]._id },
             // subcategories[15]._id
-            { name: "art-and-prints" },
+            { name: "art-and-prints", category: categories[3]._id },
             // subcategories[16]._id
-            { name: "bowls" },
+            { name: "bowls", category: categories[3]._id },
             // subcategories[17]._id
-            { name: "candles" },
+            { name: "candles", category: categories[3]._id },
             // subcategories[18]._id
-            { name: "jewelry-cases" },
+            { name: "jewelry-cases", category: categories[3]._id },
             // subcategories[19]._id
-            { name: "tableware" },
+            { name: "tableware", category: categories[3]._id },
             // subcategories[20]._id
-            { name: "throws" },
+            { name: "throws", category: categories[3]._id },
             // subcategories[21]._id
-            { name: "vases" },
+            { name: "vases", category: categories[3]._id },
             // subcategories[22]._id
-            { name: "bracelets" },
+            { name: "bracelets", category: categories[4]._id },
             // subcategories[23]._id
-            { name: "brooches" },
+            { name: "brooches", category: categories[4]._id },
             // subcategories[24]._id
-            { name: "earrings" },
+            { name: "earrings", category: categories[4]._id },
             // subcategories[25]._id
-            { name: "necklaces" },
+            { name: "necklaces", category: categories[4]._id },
             // subcategories[26]._id
-            { name: "watches" },
+            { name: "watches", category: categories[4]._id },
             // subcategories[27]._id
-            { name: "boots" },
+            { name: "boots", category: categories[5]._id },
             // subcategories[28]._id
-            { name: "heels" },
+            { name: "heels", category: categories[5]._id },
             // subcategories[29]._id
-            { name: "loafers" },
+            { name: "loafers", category: categories[5]._id },
             // subcategories[30]._id
-            { name: "mules" },
+            { name: "mules", category: categories[5]._id },
             // subcategories[31]._id
-            { name: "sandals" },
+            { name: "sandals", category: categories[5]._id },
             // subcategories[32]._id
-            { name: "sneakers" }
+            { name: "sneakers", category: categories[5]._id }
         ])
 
         console.log('subcategories seeded');
@@ -1001,8 +1001,8 @@ db.once('open', async () => {
         console.log('Seeding complete!');
 
         process.exit(0);
-    } catch (err) {
-        console.error(err);
+    } catch (error) {
+        console.error(error);
         process.exit(1);
     }
 });

@@ -1,9 +1,14 @@
-const { AuthenticationError } = require('apollo-server-express');
-const { User, Product, Category, Subcategory, Color, Designer, Order } = require('../models');
-const { signToken } = require('../utils/auth');
-const path = require('path');
-require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
-const stripe = require('stripe')(process.env.STRIPE_SECRET);
+import { AuthenticationError } from "apollo-server-express";
+import { User, Product, Category, Subcategory, Color, Designer, Order } from "../models/index.js";
+import { signToken } from "../utils/auth.js";
+import path from "path";
+import { fileURLToPath } from "url";
+import dotenv from "dotenv";
+import Stripe from 'stripe';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.resolve(__dirname, "../../.env") })
+const stripe = new Stripe(process.env.STRIPE_SECRET);
 
 // A resolver is a function that's responsible for populating the data for a single field in your schema.
 // Create the functions that fulfill the queries defined in `typeDefs.js`
@@ -12,8 +17,13 @@ const resolvers = {
         categories: async () => {
             return await Category.find();
         },
-        subcategories: async () => {
-            return await Subcategory.find();
+        subcategories: async (parent, {category}) => {
+            const params = {};
+
+            if (category) {
+                params.category = category;
+            }
+            return await Subcategory.find(params).populate('category');
         },
         colors: async () => {
             return await Color.find();
@@ -46,10 +56,10 @@ const resolvers = {
                 };
             }
 
-            return await Product.find(params).populate('category').populate('subcategory').populate('color').populate('designer');
+            return await Product.find(params).populate('category').populate({path: 'subcategory', populate: 'category'}).populate('color').populate('designer');
         },
         product: async (parent, { _id }) => {
-            return await Product.findById(_id).populate('category').populate('subcategory').populate('color').populate('designer');
+            return await Product.findById(_id).populate('category').populate({path: 'subcategory', populate: 'category'}).populate('color').populate('designer');
         },
         user: async (parent, args, context) => {
             if (context.user) {
@@ -175,4 +185,4 @@ const resolvers = {
     }
 };
 
-module.exports = resolvers;
+export default resolvers;

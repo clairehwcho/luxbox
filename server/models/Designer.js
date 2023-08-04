@@ -1,6 +1,4 @@
-const mongoose = require('mongoose');
-
-const { Schema } = mongoose;
+import { Schema, model } from "mongoose";
 
 const designerSchema = new Schema({
     name: {
@@ -10,6 +8,6 @@ const designerSchema = new Schema({
     }
 });
 
-const Designer = mongoose.model('Designer', designerSchema);
+const Designer = model("Designer", designerSchema);
 
-module.exports = Designer;
+export default Designer;

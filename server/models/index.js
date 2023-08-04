@@ -1,9 +1,9 @@
-const User = require('./User');
-const Product = require('./Product');
-const Category = require('./Category');
-const Subcategory = require('./Subcategory');
-const Color = require('./Color');
-const Designer = require('./Designer');
-const Order = require('./Order');
+import User from "./User.js";
+import Product from "./Product.js";
+import Category from "./Category.js";
+import Subcategory from "./Subcategory.js";
+import Color from "./Color.js";
+import Designer from "./Designer.js";
+import Order from "./Order.js";
 
-module.exports = { User, Product, Category, Subcategory, Color, Designer, Order };
+export { User, Product, Category, Subcategory, Color, Designer, Order };

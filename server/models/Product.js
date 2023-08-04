@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+import { Schema, model } from "mongoose";
 
 const productSchema = new Schema({
     image: {
@@ -12,7 +12,7 @@ const productSchema = new Schema({
     },
     designer: {
         type: Schema.Types.ObjectId,
-        ref: 'Designer',
+        ref: "Designer",
         required: true
     },
     price: {
@@ -22,12 +22,17 @@ const productSchema = new Schema({
     },
     color: {
         type: Schema.Types.ObjectId,
-        ref: 'Color',
+        ref: "Color",
         required: true
     },
     category: {
         type: Schema.Types.ObjectId,
-        ref: 'Category',
+        ref: "Category",
+        required: true
+    },
+    subcategory: {
+        type: Schema.Types.ObjectId,
+        ref: "Subcategory",
         required: true
     },
     quantity: {
@@ -42,6 +47,6 @@ const productSchema = new Schema({
     }
 }, { timestamps: true });
 
-const Product = model('Product', productSchema);
+const Product = model("Product", productSchema);
 
-module.exports = Product;
+export default Product;

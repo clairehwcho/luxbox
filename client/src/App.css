@@ -559,6 +559,11 @@ main {
   color: var(--red);
 }
 
+/* --- ProductCategoryFilter --- */
+.MuiFormControlLabel-root .MuiFormControlLabel-label {
+  font-size: 0.8rem
+}
+
 /* --- ProductDetail --- */
 .product-detail-wrapper {
   width: 100%;

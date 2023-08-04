@@ -9,6 +9,14 @@ import {
     REMOVE_FROM_WISHLIST,
     UPDATE_CATEGORIES,
     UPDATE_CURRENT_CATEGORY,
+    UPDATE_SUBCATEGORIES,
+    UPDATE_CLOTHING_SUBCATEGORIES,
+    UPDATE_SHOES_SUBCATEGORIES,
+    UPDATE_BAGS_SUBCATEGORIES,
+    UPDATE_JEWELRY_AND_ACCESSORIES_SUBCATEGORIES,
+    UPDATE_BEAUTY_SUBCATEGORIES,
+    UPDATE_HOME_SUBCATEGORIES,
+    UPDATE_CURRENT_SUBCATEGORY,
     UPDATE_DESIGNERS,
     UPDATE_CURRENT_DESIGNER,
     UPDATE_COLORS,
@@ -17,25 +25,27 @@ import {
     TOGGLE_SHOPPING_BAG
 } from "./actions";
 
+
+// The reducer function takes the current state, applies an action object on it and returns a new state.
 export const reducer = (state, action) => {
     switch (action.type) {
         case UPDATE_PRODUCTS:
             return {
                 ...state,
-                products: [...action.products],
+                products: [...action.payload],
             };
 
         case ADD_TO_SHOPPING_BAG:
             return {
                 ...state,
                 shoppingBagOpen: true,
-                shoppingBag: [...state.shoppingBag, action.product],
+                shoppingBag: [...state.shoppingBag, action.payload],
             };
 
         case ADD_MULTIPLE_TO_SHOPPING_BAG:
             return {
                 ...state,
-                shoppingBag: [...state.shoppingBag, ...action.products],
+                shoppingBag: [...state.shoppingBag, ...action.payload],
             };
 
         case UPDATE_SHOPPING_BAG_QUANTITY:
@@ -93,37 +103,85 @@ export const reducer = (state, action) => {
         case UPDATE_CATEGORIES:
             return {
                 ...state,
-                categories: [...action.categories],
+                categories: [...action.payload],
             };
 
         case UPDATE_CURRENT_CATEGORY:
             return {
                 ...state,
-                currentCategory: action.currentCategory
+                currentCategory: action.payload
+            }
+
+        case UPDATE_SUBCATEGORIES:
+            return {
+                ...state,
+                subcategories: [...action.payload],
+            };
+
+        case UPDATE_CLOTHING_SUBCATEGORIES:
+            return {
+                ...state,
+                clothingSubcategories: [...action.payload],
+            };
+
+        case UPDATE_SHOES_SUBCATEGORIES:
+            return {
+                ...state,
+                shoesSubcategories: [...action.payload],
+            };
+
+        case UPDATE_BAGS_SUBCATEGORIES:
+            return {
+                ...state,
+                bagsSubcategories: [...action.payload],
+            };
+
+        case UPDATE_JEWELRY_AND_ACCESSORIES_SUBCATEGORIES:
+            return {
+                ...state,
+                jewelryAndAccessoriesSubcategories: [...action.payload],
+            };
+
+        case UPDATE_BEAUTY_SUBCATEGORIES:
+            return {
+                ...state,
+                beautySubcategories: [...action.payload],
+            };
+
+        case UPDATE_HOME_SUBCATEGORIES:
+            return {
+                ...state,
+                homeSubcategories: [...action.payload],
+            };
+
+        case UPDATE_CURRENT_SUBCATEGORY:
+            return {
+                ...state,
+                currentSubcategory: action.payload
             }
 
         case UPDATE_DESIGNERS:
             return {
                 ...state,
-                designers: [...action.designers],
+                designers: [...action.payload],
             };
 
         case UPDATE_CURRENT_DESIGNER:
             return {
                 ...state,
-                currentDesigner: action.currentDesigner
+                currentDesigner: action.payload
             }
 
         case UPDATE_COLORS:
             return {
                 ...state,
-                colors: [...action.colors],
+                colors: [...action.payload],
             };
 
         case UPDATE_CURRENT_COLOR:
             return {
                 ...state,
-                currentColor: action.currentColor
+                currentColor: action.payload
             }
 
         default:
@@ -131,6 +189,8 @@ export const reducer = (state, action) => {
     }
 };
 
+// The useReducer hook takes the reducer function that contains custom state logic and the initialState.
+// The useReducer hook returns an array of the current state and the dispatch function that dispatches an action object.
 export function useProductReducer (initialState) {
     return useReducer(reducer, initialState)
 }

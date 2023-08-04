@@ -1,6 +1,6 @@
-const { Schema, model } = require('mongoose');
-const bcrypt = require('bcrypt');
-const Order = require('./Order');
+import { Schema, model } from "mongoose";
+import { hash, compare } from "bcrypt";
+import Order from "./Order.js";
 
 const userSchema = new Schema({
     firstName: {
@@ -16,7 +16,7 @@ const userSchema = new Schema({
     email: {
         type: String,
         required: [true, "Email is required."],
-        unique: [true, '{PATH} already exist. Please enter another email address.'],
+        unique: [true, "{PATH} already exist. Please enter another email address."],
         validate: {
             validator: val => /^([\w-\.]+@([\w-]+\.)+[\w-]+)?$/.test(val),
             message: "Please enter a valid email address."
@@ -33,9 +33,9 @@ const userSchema = new Schema({
 // Set up pre-save middleware to create password
 userSchema.pre("save", async function (next) {
     try {
-        if (this.isNew || this.isModified('password')) {
+        if (this.isNew || this.isModified("password")) {
             const saltRounds = 10;
-            const hashedPassword = await bcrypt.hash(this.password, saltRounds);
+            const hashedPassword = await hash(this.password, saltRounds);
             this.password = hashedPassword;
         }
         next();
@@ -46,9 +46,9 @@ userSchema.pre("save", async function (next) {
 
 // Compare the incoming password with the hashed password
 userSchema.methods.isCorrectPassword = async function (password) {
-    return await bcrypt.compare(password, this.password);
+    return await compare(password, this.password);
 };
 
-const User = model('User', userSchema);
+const User = model("User", userSchema);
 
-module.exports = User;
+export default User;

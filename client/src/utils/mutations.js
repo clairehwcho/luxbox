@@ -29,6 +29,9 @@ export const ADD_ORDER = gql`
         category {
           name
         }
+        subcategory {
+          name
+        }
       }
     }
   }
