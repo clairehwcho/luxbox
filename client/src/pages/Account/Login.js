@@ -1,19 +1,22 @@
-import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-import { useMutation } from '@apollo/client';
+import { useMutation } from "@apollo/client";
 
-import { LOGIN } from '../../../utils/mutations';
+import { LOGIN } from "../../utils/mutations";
 
-import Auth from '../../../utils/auth';
+import Auth from "../../utils/auth";
 
-import FormGroup from '@mui/material/FormGroup';
-import InputLabel from '@mui/material/InputLabel';
-import Input from '@mui/material/Input';
-import FormHelperText from '@mui/material/FormHelperText';
+import FormGroup from "@mui/material/FormGroup";
+import InputLabel from "@mui/material/InputLabel";
+import Input from "@mui/material/Input";
+import FormHelperText from "@mui/material/FormHelperText";
 
 const Login = (props) => {
-    const [formState, setFormState] = useState({ email: '', password: '' });
+    const [formState, setFormState] = useState(
+        { email: "",
+        password: "" }
+        );
     const [login, { loading, error }] = useMutation(LOGIN);
 
     const handleChange = (event) => {
@@ -40,8 +43,8 @@ const Login = (props) => {
         }
 
         setFormState({
-            email: '',
-            password: '',
+            email: "",
+            password: "",
         });
     };
 
@@ -49,7 +52,7 @@ const Login = (props) => {
 
     useEffect(() => {
         if (Auth.loggedIn()) {
-            return navigate('/account/details');
+            return navigate("/account/details");
         }
     }, [navigate]);
 

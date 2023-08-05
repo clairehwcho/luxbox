@@ -71,6 +71,7 @@ const typeDefs = gql`
     designers: [Designer]
     products(category: ID, subcategory: ID, color: ID, designer: ID, name: String): [Product]
     product(_id: ID!): Product
+    users: [User]
     user: User
     order(_id: ID!): Order
     checkout(products: [ID]!): Checkout
@@ -81,7 +82,7 @@ const typeDefs = gql`
     # Set the required fields
     addUser(firstName: String!, lastName: String!, email: String!, password: String!): Auth
     addOrder(products: [ID]!): Order
-    updateUser(firstName: String, lastName: String, email: String, password: String): User
+    updateUser(firstName: String!, lastName: String!, email: String!, password: String!): User
     updateProduct(_id: ID!, quantity: Int!): Product
     login(email: String!, password: String!): Auth
   }

@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from "react";
 
-import { Link, useParams, useNavigate } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
+import { Link, useParams, useNavigate } from "react-router-dom";
+import { useQuery } from "@apollo/client";
 
-import { QUERY_USER } from '../../../utils/queries';
-import Auth from '../../../utils/auth';
+import { QUERY_USER } from "../../utils/queries";
+import Auth from "../../utils/auth";
 
-import AccountDetail from '../../../components/Account/AccountDetail';
-import OrderHistory from '../../../components/Account/OrderHistory';
+import AccountDetail from "../../components/Account/AccountDetail";
+import OrderHistory from "../../components/Account/OrderHistory";
 
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
 
 const MyAccount = () => {
     const { accountParam } = useParams();
@@ -25,13 +25,13 @@ const MyAccount = () => {
 
     useEffect(() => {
         if (!Auth.loggedIn()) {
-            return navigate('/account/sign-in');
+            return navigate("/account/sign-in");
         }
     }, [navigate]);
 
     useEffect(() => {
         if (!data) {
-            return navigate('/');
+            return navigate("/");
         }
     }, [data, navigate]);
 

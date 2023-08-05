@@ -75,7 +75,7 @@ export const QUERY_DESIGNERS = gql`
 `;
 
 export const QUERY_COLORS = gql`
-  {
+  query GetColors {
     colors {
       _id
       name
@@ -83,9 +83,53 @@ export const QUERY_COLORS = gql`
   }
 `;
 
+export const QUERY_USERS = gql`
+  query GetUsers {
+    users {
+      _id
+      firstName
+      lastName
+      email
+      password
+      orders {
+        _id
+        purchaseDate
+        products {
+          _id
+          image
+          designer {
+            _id
+            name
+          }
+          category {
+            _id
+            name
+          }
+          subcategory {
+            _id
+            name
+            category {
+              _id
+              name
+            }
+          }
+          name
+          price
+          color {
+            _id
+            name
+          }
+          quantity
+        }
+      }
+    }
+  }
+`
+
 export const QUERY_USER = gql`
-  {
+  query GetUser {
     user {
+      _id
       firstName
       lastName
       email

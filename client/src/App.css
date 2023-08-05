@@ -52,13 +52,17 @@ button:hover {
 }
 
 .outlined-box-body {
-  height: 60px;
-  border-bottom: 1px solid var(--medium);
+  height: fit-content;
 }
 
 .outlined-box-body p {
   font-size: 0.8rem;
   margin: 0.5rem 0;
+}
+
+.outlined-box-footer {
+  padding-top: 1rem;
+  border-top: 1px solid var(--medium);
 }
 
 .outlined-box-footer p {
@@ -309,6 +313,16 @@ main {
   gap: 1rem;
 }
 
+.account-detail-box {
+  height: fit-content;
+}
+
+.account-detail-button-wrapper {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
 /* --- Home --- */
 .home-content-container {
   width: 100%;
@@ -463,6 +477,7 @@ main {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  cursor: pointer;
 }
 
 .product-result-num {
@@ -877,6 +892,10 @@ footer ul li:nth-of-type(2):hover {
   .product-filter-menu-wrapper {
     display: block;
     width: 30%;
+  }
+
+  .product-filter-icon-wrapper {
+    pointer-events: none;
   }
 
   /* --- ProductDetail --- */

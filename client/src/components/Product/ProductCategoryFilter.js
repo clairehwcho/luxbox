@@ -5,36 +5,35 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
 
 const ProductCategoryFilter = (props) => {
     const [subcategoryState, setSubcategoryState] = useState("");
-    const [subcategoryChangedState, setSubcategoryChangedState] = useState("false");
+    const [subcategoryChangedState, setSubcategoryChangedState] = useState(false);
 
-    const { searchInputParam } = useParams();
+    const { searchInputParam, categoryParam } = useParams();
 
 
     const navigate = useNavigate();
 
     const handleSubcategoryStateChange = (e) => {
         setSubcategoryState(e.target.value);
-        setSubcategoryChangedState("true");
+        setSubcategoryChangedState(true);
     }
 
     useEffect(() => {
-        if (subcategoryChangedState === "true") {
-            if (props.category === "new-in") {
+        if (subcategoryChangedState === true) {
+            if (categoryParam === "new-in") {
                 navigate(`/shop/${subcategoryState}`);
             }
-            else if (props.category === "search") {
-                navigate(`shop/search/${searchInputParam}/${subcategoryState}`);
+            else if (searchInputParam) {
+                navigate(`/shop/search/${searchInputParam}/${subcategoryState}`);
             }
             else {
-                navigate(`/shop/${props.category}/${subcategoryState}`);
+                navigate(`/shop/${categoryParam}/${subcategoryState}`);
             }
-            setSubcategoryChangedState("false");
+            setSubcategoryChangedState(false);
         };
-    }, [subcategoryChangedState, navigate, props.category, subcategoryState, searchInputParam]);
+    }, [subcategoryChangedState, navigate, categoryParam, subcategoryState, searchInputParam]);
 
 
     const categoryFilterOptions = {
@@ -110,7 +109,7 @@ const ProductCategoryFilter = (props) => {
     };
 
     const renderCategoryOptions = () => {
-        switch (props.category) {
+        switch (categoryParam) {
             case "clothing":
                 return categoryFilterOptions.clothing;
             case "shoes":

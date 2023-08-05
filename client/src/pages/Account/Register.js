@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { useMutation } from '@apollo/client';
-import { ADD_USER } from '../../../utils/mutations';
+import { ADD_USER } from '../../utils/mutations';
 
-import Auth from '../../../utils/auth';
+import Auth from '../../utils/auth';
 
 import FormGroup from '@mui/material/FormGroup';
 import InputLabel from '@mui/material/InputLabel';
@@ -12,10 +12,12 @@ import Input from '@mui/material/Input';
 
 const Register = () => {
     const [formState, setFormState] = useState({
-        email: '',
-        password: ''
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
     });
-    const [createUser, { loading, error }] = useMutation(ADD_USER);
+    const [addUser, { loading, error }] = useMutation(ADD_USER);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -30,11 +32,11 @@ const Register = () => {
         event.preventDefault();
 
         try {
-            const mutationResponse = await createUser({
+            const mutationResponse = await addUser({
                 variables: { ...formState },
             });
 
-            const token = mutationResponse.data.createUser.token;
+            const token = mutationResponse.data.addUser.token;
             Auth.login(token);
         } catch (err) {
             console.error(err);
