@@ -1,7 +1,7 @@
 {
   "name": "luxbox",
   "version": "1.0.0",
-  "homepage": "https://clairehwcho.github.io/luxbox-mern-app",
+  "homepage": "https://clairehwcho.github.io/luxbox",
   "description": "",
   "main": "server/server.js",
   "scripts": {
