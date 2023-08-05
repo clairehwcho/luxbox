@@ -850,6 +850,10 @@ footer ul li:nth-of-type(2):hover {
     flex: 0 1 50%;
   }
 
+  .account-detail-box .outlined-box-body {
+    height: 50px;
+  }
+
   /* --- Home --- */
   .just-landed img {
     position: relative;
