@@ -2,6 +2,7 @@ import express, { urlencoded, json } from "express";
 // Import the ApolloServer class
 import { ApolloServer } from "apollo-server-express";
 import path from "path";
+import { fileURLToPath } from 'url';
 import { authMiddleware } from "./utils/auth.js";
 
 // Import the two parts of a GraphQL schema.
@@ -18,6 +19,9 @@ const server = new ApolloServer({
 
 app.use(urlencoded({ extended: false }));
 app.use(json());
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 if (process.env.NODE_ENV === "production") {
     app.use(express.static(path.join(__dirname, "../client/build")));
