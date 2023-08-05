@@ -851,7 +851,7 @@ footer ul li:nth-of-type(2):hover {
   }
 
   .account-detail-box .outlined-box-body {
-    height: 50px;
+    min-height: 50px;
   }
 
   /* --- Home --- */
