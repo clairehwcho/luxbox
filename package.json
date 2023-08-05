@@ -1,7 +1,7 @@
 {
   "name": "luxbox",
   "version": "1.0.0",
-  "homepage": "https://clairehwcho.github.io/luxbox",
+  "homepage": "https://luxbox-b3b38e53281d.herokuapp.com",
   "description": "",
   "main": "server/server.js",
   "scripts": {
