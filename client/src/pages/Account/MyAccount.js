@@ -20,7 +20,7 @@ const MyAccount = () => {
     const { data } = useQuery(QUERY_USER);
 
     const user = data?.user || {};
-
+    
     const navigate = useNavigate();
 
     useEffect(() => {

@@ -50,6 +50,7 @@ const typeDefs = gql`
     firstName: String
     lastName: String
     email: String
+    password: String
     orders: [Order]
   }
 
@@ -82,7 +83,7 @@ const typeDefs = gql`
     # Set the required fields
     addUser(firstName: String!, lastName: String!, email: String!, password: String!): Auth
     addOrder(products: [ID]!): Order
-    updateUser(firstName: String!, lastName: String!, email: String!, password: String!): User
+    updateUser(_id: ID!, firstName: String!, lastName: String!, email: String!, password: String!): Auth
     updateProduct(_id: ID!, quantity: Int!): Product
     login(email: String!, password: String!): Auth
   }

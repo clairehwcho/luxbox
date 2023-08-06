@@ -74,14 +74,6 @@ export const QUERY_DESIGNERS = gql`
   }
 `;
 
-export const QUERY_COLORS = gql`
-  query GetColors {
-    colors {
-      _id
-      name
-    }
-  }
-`;
 
 export const QUERY_USERS = gql`
   query GetUsers {
@@ -133,6 +125,7 @@ export const QUERY_USER = gql`
       firstName
       lastName
       email
+      password
       orders {
         _id
         purchaseDate

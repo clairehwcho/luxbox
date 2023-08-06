@@ -1,7 +1,9 @@
 import { useState, Fragment } from "react";
 
 import { useMutation } from '@apollo/client';
+import { QUERY_USER } from "../../utils/queries";
 import { UPDATE_USER } from "../../utils/mutations";
+import Auth from "../../utils/auth";
 
 import FormGroup from '@mui/material/FormGroup';
 import InputLabel from '@mui/material/InputLabel';
@@ -19,7 +21,9 @@ const AccountDetail = (props) => {
         password: props.user.password,
     });
 
-    const [updateUser, { loading, error }] = useMutation(UPDATE_USER);
+    const [updateUser, { loading, error }] = useMutation(UPDATE_USER, {
+        refetchQueries: [QUERY_USER, "GetUser"]
+    });
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -35,8 +39,9 @@ const AccountDetail = (props) => {
 
         try {
             await updateUser({
-                variables: { ...formState },
+                variables: { ...formState }
             });
+
             setPersonalInfoEditedState(false);
             setPasswordEditedState(false);
 
@@ -82,8 +87,7 @@ const AccountDetail = (props) => {
                                     <Input
                                         className="form-input"
                                         id="edit-first-name"
-                                        name="first-name"
-                                        type="first-name"
+                                        name="firstName"
                                         defaultValue={formState.firstName}
                                         sx={{
                                             fontSize: "small"
@@ -96,8 +100,7 @@ const AccountDetail = (props) => {
                                     <Input
                                         className="form-input"
                                         id="edit-last-name"
-                                        name="last-name"
-                                        type="last-name"
+                                        name="lastName"
                                         defaultValue={formState.lastName}
                                         sx={{
                                             fontSize: "small"
@@ -160,7 +163,6 @@ const AccountDetail = (props) => {
                                         placeholder="Enter at least 4 characters."
                                         name="password"
                                         type="password"
-                                        defaultValue={formState.password}
                                         sx={{
                                             fontSize: "small"
                                         }}

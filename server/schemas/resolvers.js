@@ -17,7 +17,7 @@ const resolvers = {
         categories: async () => {
             return await Category.find();
         },
-        subcategories: async (parent, {category}) => {
+        subcategories: async (parent, { category }) => {
             const params = {};
 
             if (category) {
@@ -56,10 +56,13 @@ const resolvers = {
                 };
             }
 
-            return await Product.find(params).populate('category').populate({path: 'subcategory', populate: 'category'}).populate('color').populate('designer');
+            return await Product.find(params).populate('category').populate({ path: 'subcategory', populate: 'category' }).populate('color').populate('designer');
         },
         product: async (parent, { _id }) => {
-            return await Product.findById(_id).populate('category').populate({path: 'subcategory', populate: 'category'}).populate('color').populate('designer');
+            return await Product.findById(_id).populate('category').populate({ path: 'subcategory', populate: 'category' }).populate('color').populate('designer');
+        },
+        users: async () => {
+            return await User.find();
         },
         user: async (parent, args, context) => {
             if (context.user) {
@@ -149,7 +152,11 @@ const resolvers = {
         },
         updateUser: async (parent, args, context) => {
             if (context.user) {
-                return await User.findByIdAndUpdate(context.user._id, args, { new: true });
+                const user = await User.findByIdAndUpdate(context.user._id, args, { new: true });
+
+                const token = signToken(user);
+
+                return { token, user };
             }
 
             throw new AuthenticationError('Not logged in');
