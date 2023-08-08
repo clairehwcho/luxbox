@@ -56,9 +56,76 @@ const ProductList = (props) => {
     };
 
     // The useQuery hook returns an object from Apollo Client that contains loading, error, and data properties that can be used to render UI.
-    const { loading: productsLoading, error: productsError, data: productsData } = useQuery(QUERY_PRODUCTS);
     const { loading: categoriesLoading, error: categoriesError, data: categoriesData } = useQuery(QUERY_CATEGORIES);
     const { loading: subcategoriesLoading, error: subcategoriesError, data: subcategoriesData } = useQuery(QUERY_SUBCATEGORIES);
+    const { loading: productsLoading, error: productsError, data: productsData } = useQuery(QUERY_PRODUCTS);
+
+
+    // Get categories.
+    useEffect(() => {
+        try {
+            if (categoriesData) {
+                dispatch({
+                    type: UPDATE_CATEGORIES,
+                    payload: categoriesData.categories,
+                });
+                categoriesData.categories.forEach((category) => {
+                    idbPromise("categories", "put", category);
+
+                    if (category.name === categoryParam) {
+                        dispatch({
+                            type: UPDATE_CURRENT_CATEGORY,
+                            payload: category._id,
+                        });
+                    }
+                });
+            } else if (!categoriesLoading) {
+                idbPromise("categories", "get").then((categories) => {
+                    dispatch({
+                        type: UPDATE_CATEGORIES,
+                        payload: categories,
+                    });
+                });
+            } else if (categoriesError) {
+                console.error(categoriesError);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }, [categoriesData, categoriesLoading, categoriesError, dispatch, categoryParam]);
+
+    // Get subcategories.
+    useEffect(() => {
+        try {
+            if (subcategoriesData) {
+                dispatch({
+                    type: UPDATE_SUBCATEGORIES,
+                    payload: subcategoriesData.subcategories,
+                });
+                subcategoriesData.subcategories.forEach((subcategory) => {
+                    idbPromise("subcategories", "put", subcategory);
+
+                    if (subcategory.name === subcategoryParam) {
+                        dispatch({
+                            type: UPDATE_CURRENT_SUBCATEGORY,
+                            payload: subcategory._id,
+                        });
+                    }
+                });
+            } else if (!subcategoriesLoading) {
+                idbPromise("subcategories", "get").then((subcategories) => {
+                    dispatch({
+                        type: UPDATE_SUBCATEGORIES,
+                        payload: subcategories,
+                    });
+                });
+            } else if (subcategoriesError) {
+                console.error(subcategoriesError);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }, [subcategoriesData, subcategoriesLoading, subcategoriesError, dispatch, subcategoryParam]);
 
     // Get products.
     useEffect(() => {
@@ -130,73 +197,6 @@ const ProductList = (props) => {
             console.error(error);
         }
     }, [productsData, productsLoading, productsError, dispatch]);
-
-    // Get categories.
-    useEffect(() => {
-        try {
-            if (categoriesData) {
-                dispatch({
-                    type: UPDATE_CATEGORIES,
-                    payload: categoriesData.categories,
-                });
-                categoriesData.categories.forEach((category) => {
-                    idbPromise("categories", "put", category);
-
-                    if (category.name === categoryParam) {
-                        dispatch({
-                            type: UPDATE_CURRENT_CATEGORY,
-                            payload: category._id,
-                        });
-                    }
-                });
-            } else if (!categoriesLoading) {
-                idbPromise("categories", "get").then((categories) => {
-                    dispatch({
-                        type: UPDATE_CATEGORIES,
-                        payload: categories,
-                    });
-                });
-            } else if (categoriesError) {
-                console.error(categoriesError);
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    }, [categoriesData, categoriesLoading, categoriesError, dispatch, categoryParam]);
-
-    // Get subcategories.
-    useEffect(() => {
-        try {
-            if (subcategoriesData) {
-                dispatch({
-                    type: UPDATE_SUBCATEGORIES,
-                    payload: subcategoriesData.subcategories,
-                });
-                subcategoriesData.subcategories.forEach((subcategory) => {
-                    idbPromise("subcategories", "put", subcategory);
-
-                    if (subcategory.name === subcategoryParam) {
-                        dispatch({
-                            type: UPDATE_CURRENT_SUBCATEGORY,
-                            payload: subcategory._id,
-                        });
-                    }
-                });
-            } else if (!subcategoriesLoading) {
-                idbPromise("subcategories", "get").then((subcategories) => {
-                    dispatch({
-                        type: UPDATE_SUBCATEGORIES,
-                        payload: subcategories,
-                    });
-                });
-            } else if (subcategoriesError) {
-                console.error(subcategoriesError);
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    }, [subcategoriesData, subcategoriesLoading, subcategoriesError, dispatch, subcategoryParam]);
-
 
     // Handle sorting.
     const handleSortChange = (e) => {
