@@ -30,7 +30,7 @@ const userSchema = new Schema({
     orders: [Order.schema]
 }, { timestamps: true });
 
-// Set up pre-save middleware to create password
+// Set up pre-save middleware to create password.
 userSchema.pre("save", async function (next) {
     try {
         if (this.isNew || this.isModified("password")) {
@@ -44,6 +44,7 @@ userSchema.pre("save", async function (next) {
     }
 });
 
+// Set up pre-findOneAndUpdate middleware to change password.
 userSchema.pre("findOneAndUpdate", async function (next) {
     try {
         if (this._update.password) {
