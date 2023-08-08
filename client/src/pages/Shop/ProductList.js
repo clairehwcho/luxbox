@@ -136,7 +136,9 @@ const ProductList = (props) => {
                     payload: productsData.products,
                 });
                 productsData.products.forEach((product) => {
+                    console.log("_id", product.subcategory._id);
                     idbPromise("products", "put", product);
+                    console.log("idbPromise done")
                     // eslint-disable-next-line default-case
                     switch (product.category.name) {
                         case "clothing":
