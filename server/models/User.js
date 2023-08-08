@@ -40,7 +40,20 @@ userSchema.pre("save", async function (next) {
         }
         next();
     } catch (err) {
-        console.log("error in save", err);
+        console.log("error in save: ", err);
+    }
+});
+
+userSchema.pre("findOneAndUpdate", async function (next) {
+    try {
+        if (this._update.password) {
+            const saltRounds = 10;
+            const hashedPassword = await hash(this._update.password, saltRounds);
+            this._update.password = hashedPassword;
+        }
+        next();
+    } catch (err) {
+        console.log("error in update: ", err);
     }
 });
 
