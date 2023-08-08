@@ -1,6 +1,5 @@
-import { useEffect, Fragment } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
+import { Fragment } from 'react';
+import { Link } from 'react-router-dom';
 
 import LoginIcon from '@mui/icons-material/LoginOutlined';
 import LogoutIcon from '@mui/icons-material/LogoutOutlined';
@@ -9,12 +8,10 @@ import RegisterIcon from '@mui/icons-material/PersonAddAlt';
 import WishlistIcon from '@mui/icons-material/FavoriteBorder';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBagOutlined';
 
-import { QUERY_USER } from '../../../../utils/queries';
 import Auth from '../../../../utils/auth';
 
 const AccountMenu = (props) => {
 
-    const { data } = useQuery(QUERY_USER);
 
     const logout = (event) => {
         event.preventDefault();

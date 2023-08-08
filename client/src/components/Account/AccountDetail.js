@@ -3,7 +3,6 @@ import { useState, Fragment } from "react";
 import { useMutation } from '@apollo/client';
 import { QUERY_USER } from "../../utils/queries";
 import { UPDATE_USER } from "../../utils/mutations";
-import Auth from "../../utils/auth";
 
 import FormGroup from '@mui/material/FormGroup';
 import InputLabel from '@mui/material/InputLabel';

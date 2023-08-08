@@ -67,7 +67,7 @@ const typeDefs = gql`
   # Define which queries the front end is allowed to make and what data is returned
   type Query {
     categories: [Category]
-    subcategories: [Subcategory]
+    subcategories(category: ID): [Subcategory]
     colors: [Color]
     designers: [Designer]
     products(category: ID, subcategory: ID, color: ID, designer: ID, name: String): [Product]
