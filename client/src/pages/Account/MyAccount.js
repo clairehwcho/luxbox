@@ -20,7 +20,7 @@ const MyAccount = () => {
     const { data } = useQuery(QUERY_USER);
 
     const user = data?.user || {};
-    
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -28,12 +28,6 @@ const MyAccount = () => {
             return navigate("/account/sign-in");
         }
     }, [navigate]);
-
-    useEffect(() => {
-        if (!data) {
-            return navigate("/");
-        }
-    }, [data, navigate]);
 
     return (
         <section className="main-content-container">

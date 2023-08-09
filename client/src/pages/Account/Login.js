@@ -13,10 +13,11 @@ import Input from "@mui/material/Input";
 import FormHelperText from "@mui/material/FormHelperText";
 
 const Login = (props) => {
-    const [formState, setFormState] = useState(
-        { email: "",
-        password: "" }
-        );
+    const [formState, setFormState] = useState({
+        email: "",
+        password: ""
+    });
+
     const [login, { loading, error }] = useMutation(LOGIN);
 
     const handleChange = (event) => {

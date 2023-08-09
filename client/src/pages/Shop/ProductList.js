@@ -136,53 +136,51 @@ const ProductList = (props) => {
                     payload: productsData.products,
                 });
                 productsData.products.forEach((product) => {
-                    if (product) {
-                        idbPromise("products", "put", product);
-                        // eslint-disable-next-line default-case
-                        switch (product.category.name) {
-                            case "clothing":
-                                dispatch({
-                                    type: UPDATE_CLOTHING_SUBCATEGORIES,
-                                    payload: product.subcategory._id
-                                });
-                                idbPromise("clothingSubcategories", "put", product.subcategory);
-                                break;
-                            case "shoes":
-                                dispatch({
-                                    type: UPDATE_SHOES_SUBCATEGORIES,
-                                    payload: product.subcategory._id
-                                });
-                                idbPromise("shoesSubcategories", "put", product.subcategory);
-                                break;
-                            case "bags":
-                                dispatch({
-                                    type: UPDATE_BAGS_SUBCATEGORIES,
-                                    payload: product.subcategory._id
-                                });
-                                idbPromise("bagsSubcategories", "put", product.subcategory);
-                                break;
-                            case "jewelry-and-accessories":
-                                dispatch({
-                                    type: UPDATE_JEWELRY_AND_ACCESSORIES_SUBCATEGORIES,
-                                    payload: product.subcategory._id
-                                });
-                                idbPromise("jewelryAndAccessoriesSubcategories", "put", product.subcategory);
-                                break;
-                            case "beauty":
-                                dispatch({
-                                    type: UPDATE_BEAUTY_SUBCATEGORIES,
-                                    payload: product.subcategory._id
-                                });
-                                idbPromise("beautySubcategories", "put", product.subcategory);
-                                break;
-                            case "home":
-                                dispatch({
-                                    type: UPDATE_HOME_SUBCATEGORIES,
-                                    payload: product.subcategory._id
-                                });
-                                idbPromise("homeSubcategories", "put", product.subcategory);
-                                break;
-                        }
+                    idbPromise("products", "put", product);
+                    // eslint-disable-next-line default-case
+                    switch (product.category.name) {
+                        case "clothing":
+                            dispatch({
+                                type: UPDATE_CLOTHING_SUBCATEGORIES,
+                                payload: product.subcategory._id
+                            });
+                            idbPromise("clothingSubcategories", "put", product.subcategory);
+                            break;
+                        case "shoes":
+                            dispatch({
+                                type: UPDATE_SHOES_SUBCATEGORIES,
+                                payload: product.subcategory._id
+                            });
+                            idbPromise("shoesSubcategories", "put", product.subcategory);
+                            break;
+                        case "bags":
+                            dispatch({
+                                type: UPDATE_BAGS_SUBCATEGORIES,
+                                payload: product.subcategory._id
+                            });
+                            idbPromise("bagsSubcategories", "put", product.subcategory);
+                            break;
+                        case "jewelry-and-accessories":
+                            dispatch({
+                                type: UPDATE_JEWELRY_AND_ACCESSORIES_SUBCATEGORIES,
+                                payload: product.subcategory._id
+                            });
+                            idbPromise("jewelryAndAccessoriesSubcategories", "put", product.subcategory);
+                            break;
+                        case "beauty":
+                            dispatch({
+                                type: UPDATE_BEAUTY_SUBCATEGORIES,
+                                payload: product.subcategory._id
+                            });
+                            idbPromise("beautySubcategories", "put", product.subcategory);
+                            break;
+                        case "home":
+                            dispatch({
+                                type: UPDATE_HOME_SUBCATEGORIES,
+                                payload: product.subcategory._id
+                            });
+                            idbPromise("homeSubcategories", "put", product.subcategory);
+                            break;
                     }
                 })
             } else if (!productsLoading) {
