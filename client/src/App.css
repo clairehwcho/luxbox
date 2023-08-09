@@ -613,6 +613,38 @@ main {
   font-weight: bold;
 }
 
+.product-detail-quantity {
+  display: flex;
+}
+
+.quantity-input-modifier,
+.quantity-input-screen {
+  width: 2.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.7rem;
+  font-size: 0.9rem;
+}
+
+.quantity-input-modifier {
+  background-color: var(--light);
+  border: 1px solid var(--medium-dark);
+  cursor: pointer;
+}
+
+.quantity-input-modifier:hover {
+  background-color: var(--medium);
+}
+
+.quantity-input-screen {
+  text-align: center;
+  border-top: 1px solid var(--medium-dark);
+  border-bottom: 1px solid var(--medium-dark);
+  border-left: 0px;
+  border-right: 0px;
+}
+
 .product-detail-button-wrapper {
   width: 100%;
   display: flex;

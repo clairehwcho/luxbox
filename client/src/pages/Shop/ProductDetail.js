@@ -132,91 +132,109 @@ const ProductDetail = (props) => {
 
 
 
-const singleProduct = () => {
-    for (let i = 0; i < state.products.length; i++) {
-        const currentProduct = state.products[i];
-        if (
-            currentProduct.designer.name === designerParam &&
-            currentProduct.category.name === categoryParam &&
-            currentProduct.name === nameParam
-        ) {
-            return currentProduct;
+    const singleProduct = () => {
+        for (let i = 0; i < state.products.length; i++) {
+            const currentProduct = state.products[i];
+            if (
+                currentProduct.designer.name === designerParam &&
+                currentProduct.category.name === categoryParam &&
+                currentProduct.name === nameParam
+            ) {
+                return currentProduct;
+            }
         }
+        return;
     }
-    return;
-}
 
-function addToWishlist () {
-}
+    function addToWishlist () {
+    }
 
-const addToShoppingBag = () => {
-    // const itemInShoppingBag = shoppingBag.find((shoppingBagItem) => shoppingBagItem._id === id);
-    // if (itemInShoppingBag) {
+    const addToShoppingBag = () => {
+        // const itemInShoppingBag = shoppingBag.find((shoppingBagItem) => shoppingBagItem._id === id);
+        // if (itemInShoppingBag) {
+        //     dispatch({
+        //         type: UPDATE_CART_QUANTITY,
+        //         _id: id,
+        //         purchaseQuantity: parseInt(itemInShoppingBag.purchaseQuantity) + 1,
+        //     });
+        //     idbPromise('shoppingBag', 'put', {
+        //         ...itemInShoppingBag,
+        //         purchaseQuantity: parseInt(itemInShoppingBag.purchaseQuantity) + 1,
+        //     });
+        // } else {
+        //     dispatch({
+        //         type: ADD_TO_CART,
+        //         product: { ...currentProduct, purchaseQuantity: 1 },
+        //     });
+        //     idbPromise('shoppingBag', 'put', { ...currentProduct, purchaseQuantity: 1 });
+        // }
+    };
+
+    // const removeFromShoppingBag = () => {
     //     dispatch({
-    //         type: UPDATE_CART_QUANTITY,
-    //         _id: id,
-    //         purchaseQuantity: parseInt(itemInShoppingBag.purchaseQuantity) + 1,
+    //         type: REMOVE_FROM_CART,
+    //         _id: currentProduct._id,
     //     });
-    //     idbPromise('shoppingBag', 'put', {
-    //         ...itemInShoppingBag,
-    //         purchaseQuantity: parseInt(itemInShoppingBag.purchaseQuantity) + 1,
-    //     });
-    // } else {
-    //     dispatch({
-    //         type: ADD_TO_CART,
-    //         product: { ...currentProduct, purchaseQuantity: 1 },
-    //     });
-    //     idbPromise('shoppingBag', 'put', { ...currentProduct, purchaseQuantity: 1 });
-    // }
-};
 
-// const removeFromShoppingBag = () => {
-//     dispatch({
-//         type: REMOVE_FROM_CART,
-//         _id: currentProduct._id,
-//     });
+    //     idbPromise('shoppingBag', 'delete', { ...currentProduct });
 
-//     idbPromise('shoppingBag', 'delete', { ...currentProduct });
+    const getSalePrice = (price) => {
+        return (Math.ceil(price * 0.8));
+    };
 
-const getSalePrice = (price) => {
-    return (Math.ceil(price * 0.8));
-};
+    // Handle quantity input
+    const [quantityState, setQuantityState] = useState(1)
 
-return (
-    <section className="main-content-container">
-        {singleProduct() !== undefined && (
-            <div className="product-detail-wrapper">
-                <div className="product-detail-image">
-                    <img src={require(`../../assets/img/products/${singleProduct().category.name}/${singleProduct().image}.png`)} alt={singleProduct().name} />
-                </div >
-                <div className="product-detail-info">
-                    <h3>{singleProduct().designer.name}</h3>
-                    <p className="product-detail-name">{singleProduct().name}</p>
-                    <div className="product-detail-price">
-                        {singleProduct().onSale === true
-                            ? (
-                                <div className="sale-price-wrapper">
-                                    <span className="original-price">{formatCurrency(singleProduct().price)}</span>
-                                    <span className="sale-price">{formatCurrency(getSalePrice(singleProduct().price))}</span>
-                                </div>
-                            )
-                            : formatCurrency(singleProduct().price)
-                        }
-                    </div>
-                    <p className="product-detail-color">Color: {singleProduct().color.name}</p>
-                    <div className="product-detail-button-wrapper">
-                        <button className="filled-btn" onClick={addToShoppingBag}>
-                            Add to Bag
-                        </button>
-                        <button className="outlined-btn" onClick={addToWishlist}>
-                            Add to Wish List
-                        </button>
+    const handleIncrement = () => {
+        return setQuantityState(quantityState+1);
+    };
+
+    const handleDecrement = () => {
+        if (quantityState > 1) {
+            return setQuantityState(quantityState-1);
+        };
+    };
+
+    return (
+        <section className="main-content-container">
+            {singleProduct() !== undefined && (
+                <div className="product-detail-wrapper">
+                    <div className="product-detail-image">
+                        <img src={require(`../../assets/img/products/${singleProduct().category.name}/${singleProduct().image}.png`)} alt={singleProduct().name} />
+                    </div >
+                    <div className="product-detail-info">
+                        <h3>{singleProduct().designer.name}</h3>
+                        <p className="product-detail-name">{singleProduct().name}</p>
+                        <div className="product-detail-price">
+                            {singleProduct().onSale === true
+                                ? (
+                                    <div className="sale-price-wrapper">
+                                        <span className="original-price">{formatCurrency(singleProduct().price)}</span>
+                                        <span className="sale-price">{formatCurrency(getSalePrice(singleProduct().price))}</span>
+                                    </div>
+                                )
+                                : formatCurrency(singleProduct().price)
+                            }
+                        </div>
+                        <p className="product-detail-color">Color: {singleProduct().color.name}</p>
+                        <div className="product-detail-quantity">
+                            <button className="quantity-input-modifier quantity-input-decrement-button" onClick={handleDecrement}>&minus;</button>
+                            <input className="quantity-input-screen" type="text" value={quantityState} readOnly/>
+                            <button className="quantity-input-modifier quantity-input-increment-button" onClick={handleIncrement}>&#43;</button>
+                        </div>
+                        <div className="product-detail-button-wrapper">
+                            <button className="filled-btn" onClick={addToShoppingBag}>
+                                Add to Bag
+                            </button>
+                            <button className="outlined-btn" onClick={addToWishlist}>
+                                Add to Wish List
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        )}
-    </section >
-);
+            )}
+        </section >
+    );
 };
 
 export default ProductDetail;
