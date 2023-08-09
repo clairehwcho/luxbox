@@ -18,6 +18,8 @@ const Main = (props) => {
                 <Route path="/account/:accountParam" element={<MyAccount />} />
                 <Route path="/shop/designers" element={<DesignerList />} />
                 <Route path="/shop/designers/:designerParam" element={<ProductList />} />
+                <Route path="/shop/designers/:designerParam/:categoryParam" element={<ProductList />} />
+                <Route path="/shop/designers/:designerParam/:categoryParam/:subcategoryParam" element={<ProductList />} />
                 <Route path="/shop/search/:searchInputParam" element={<ProductList />} />
                 <Route path="/shop/search/:searchInputParam/:categoryParam" element={<ProductList />} />
                 <Route path="/shop/product/:designerParam/:categoryParam/:nameParam" element={<ProductDetail />} />

@@ -260,15 +260,25 @@ const ProductList = (props) => {
             }
         }
         else if (designerParam) {
+            const isCurrentDesigner = (product) => {
+                if (subcategoryParam) {
+                    return (product.designer.name === formattedDesignerName) && (product.subcategory.name === subcategoryParam);
+                }
+                if (categoryParam) {
+                    return (product.designer.name === formattedDesignerName) && (product.category.name === categoryParam);
+                }
+                return (product.designer.name === formattedDesignerName);
+            }
+
             switch (sortState) {
                 case "newest":
-                    return state.products.sort((a, b) => parseInt(a.createdAt) - parseInt(b.createdAt)).filter((product) => product.designer.name === formattedDesignerName);
+                    return state.products.sort((a, b) => parseInt(a.createdAt) - parseInt(b.createdAt)).filter(isCurrentDesigner);
                 case "price-high-to-low":
-                    return state.products.sort((a, b) => parseInt(b.price) - parseInt(a.price)).filter((product) => product.designer.name === formattedDesignerName);
+                    return state.products.sort((a, b) => parseInt(b.price) - parseInt(a.price)).filter(isCurrentDesigner);
                 case "price-low-to-high":
-                    return state.products.sort((a, b) => a.price - b.price).filter((product) => product.designer.name === formattedDesignerName);
+                    return state.products.sort((a, b) => a.price - b.price).filter(isCurrentDesigner);
                 default:
-                    return state.products.sort((a, b) => parseInt(a.createdAt) - parseInt(b.createdAt)).filter((product) => product.designer.name === formattedDesignerName);
+                    return state.products.sort((a, b) => parseInt(a.createdAt) - parseInt(b.createdAt)).filter(isCurrentDesigner);
             }
         }
         else if (subcategoryParam) {

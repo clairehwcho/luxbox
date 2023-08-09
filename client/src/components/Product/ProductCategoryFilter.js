@@ -10,7 +10,7 @@ const ProductCategoryFilter = (props) => {
     const [subcategoryState, setSubcategoryState] = useState("");
     const [subcategoryChangedState, setSubcategoryChangedState] = useState(false);
 
-    const { searchInputParam, categoryParam } = useParams();
+    const { designerParam, searchInputParam, categoryParam } = useParams();
 
 
     const navigate = useNavigate();
@@ -28,12 +28,20 @@ const ProductCategoryFilter = (props) => {
             else if (searchInputParam) {
                 navigate(`/shop/search/${searchInputParam}/${subcategoryState}`);
             }
+            else if (designerParam) {
+                if (categoryParam) {
+                    navigate(`/shop/designers/${designerParam}/${categoryParam}/${subcategoryState}`);
+                }
+                else {
+                    navigate(`/shop/designers/${designerParam}/${subcategoryState}`);
+                }
+            }
             else {
                 navigate(`/shop/${categoryParam}/${subcategoryState}`);
             }
             setSubcategoryChangedState(false);
         };
-    }, [subcategoryChangedState, navigate, categoryParam, subcategoryState, searchInputParam]);
+    }, [subcategoryChangedState, navigate, categoryParam, subcategoryState, searchInputParam, designerParam]);
 
 
     const categoryFilterOptions = {
