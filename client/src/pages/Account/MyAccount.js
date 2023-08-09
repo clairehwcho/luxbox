@@ -29,6 +29,12 @@ const MyAccount = () => {
         }
     }, [navigate]);
 
+    useEffect(() => {
+        if (!data) {
+            return navigate("/");
+        }
+    }, [data, navigate]);
+
     return (
         <section className="main-content-container">
             <div className="main-content-row">
