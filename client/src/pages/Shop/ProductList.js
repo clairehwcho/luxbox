@@ -381,8 +381,8 @@ const ProductList = (props) => {
                                             </AccordionDetails>
                                         </Accordion>
                                         <div className="product-filter-button-wrapper">
-                                            <button className="outlined-btn">Clear All</button>
-                                            <button className="filled-btn">Apply</button>
+                                            <button className="outlined-btn" onClick={closeProductFilterMenu}>Clear All</button>
+                                            <button className="filled-btn" onClick={closeProductFilterMenu}>Apply</button>
                                         </div>
                                     </div>
                                     <div className="product-filter-icon-wrapper" onClick={openProductFilterMenu}>
