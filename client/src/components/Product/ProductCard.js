@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
-
 import { formatCurrency } from '../../utils/helpers';
 
 const ProductCard = (props) => {
+
     return (
-        <Link to={`/shop/product/${props.designer}/${props.category}/${props.name}`} className="link" state={{ product: props }}>
+        <Link to={`/shop/product/${props.designer}/${props.category}/${props.name}`} className="link" >
             <div className="product-card-column">
                 <div className="product-card">
                     <div className="product-card-header">

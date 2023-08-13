@@ -27,6 +27,7 @@
   background-color: var(--dark);
   padding: 0.7rem;
   border: none;
+  cursor: pointer;
 }
 
 .outlined-btn {
@@ -36,6 +37,7 @@
   background-color: white;
   border: 1px solid var(--dark);
   padding: 0.7rem;
+  cursor: pointer;
 }
 
 button:hover {

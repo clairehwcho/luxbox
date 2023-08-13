@@ -1,6 +1,7 @@
 import { useReducer } from "react";
 import {
     UPDATE_PRODUCTS,
+    UPDATE_CURRENT_PRODUCT,
     ADD_TO_SHOPPING_BAG,
     UPDATE_SHOPPING_BAG_QUANTITY,
     REMOVE_FROM_SHOPPING_BAG,
@@ -33,6 +34,12 @@ export const reducer = (state, action) => {
             return {
                 ...state,
                 products: [...action.payload],
+            };
+
+        case UPDATE_CURRENT_PRODUCT:
+            return {
+                ...state,
+                currentProduct: action.payload,
             };
 
         case ADD_TO_SHOPPING_BAG:
@@ -87,7 +94,7 @@ export const reducer = (state, action) => {
         case ADD_TO_WISHLIST:
             return {
                 ...state,
-                wishlist: [...state.wishlist, action.product],
+                wishlist: [...state.wishlist, action.payload],
             };
 
         case REMOVE_FROM_WISHLIST:
@@ -191,6 +198,6 @@ export const reducer = (state, action) => {
 
 // The useReducer hook takes the reducer function that contains custom state logic and the initialState.
 // The useReducer hook returns an array of the current state and the dispatch function that dispatches an action object.
-export function useProductReducer (initialState) {
+export const useProductReducer = (initialState) => {
     return useReducer(reducer, initialState)
 }

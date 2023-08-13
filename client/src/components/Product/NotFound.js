@@ -1,7 +1,7 @@
 const NotFound = (props) => {
     return (
         <section className="not-found-wrapper">
-            <p>Items not found.</p>
+            <p>Item not found.</p>
         </section >
     );
 };

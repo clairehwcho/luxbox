@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import { useQuery } from '@apollo/client';
 
 import { QUERY_USER } from '../../utils/queries';
 import { useStoreContext } from '../../utils/GlobalState';
+import Auth from '../../utils/auth';
 
 import {
     UPDATE_PRODUCTS,
+    UPDATE_CURRENT_PRODUCT,
     UPDATE_CATEGORIES,
     UPDATE_CURRENT_CATEGORY,
     UPDATE_SUBCATEGORIES,
@@ -18,6 +20,7 @@ import {
     UPDATE_BEAUTY_SUBCATEGORIES,
     UPDATE_HOME_SUBCATEGORIES,
     UPDATE_CURRENT_SUBCATEGORY,
+    ADD_TO_WISHLIST,
 } from '../../utils/actions';
 import {
     QUERY_PRODUCTS,
@@ -25,128 +28,68 @@ import {
     QUERY_SUBCATEGORIES,
 } from '../../utils/queries';
 import { formatCurrency, idbPromise } from '../../utils/helpers';
+import NotFound from '../../components/Product/NotFound';
 
 const ProductDetail = (props) => {
+    const [currentProductState, setCurrentProductState] = useState();
+    const [isInWishlistState, setIsInWishlistState] = useState(false);
+
     const { designerParam, categoryParam, subcategoryParam, nameParam } = useParams();
 
     const [state, dispatch] = useStoreContext();
 
-    const { products, shoppingBag } = state;
+    const { products, shoppingBag, wishlist } = state;
 
     const { loading: productsLoading, error: productsError, data: productsData } = useQuery(QUERY_PRODUCTS);
-    const { loading: categoriesLoading, error: categoriesError, data: categoriesData } = useQuery(QUERY_CATEGORIES);
-    const { loading: subcategoriesLoading, error: subcategoriesError, data: subcategoriesData } = useQuery(QUERY_SUBCATEGORIES);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         try {
             if (productsData) {
-                dispatch({
-                    type: UPDATE_PRODUCTS,
-                    payload: productsData.products
-                });
-                productsData.products.forEach((product) => {
-                    idbPromise("products", "put", product);
-
-                })
-            } else if (!productsLoading) {
-                idbPromise("products", "get").then((products) => {
-                    dispatch({
-                        type: UPDATE_PRODUCTS,
-                        products: products,
-                    });
-                });
-            } else if (productsError) {
-                console.error(productsError);
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    }, [productsData, productsLoading, productsError, dispatch]);
-
-
-    // Get categories.
-    useEffect(() => {
-        try {
-            if (categoriesData) {
-                dispatch({
-                    type: UPDATE_CATEGORIES,
-                    payload: categoriesData.categories,
-                });
-                categoriesData.categories.forEach((category) => {
-                    idbPromise("categories", "put", category);
-
-                    if (category.name === categoryParam) {
+                for (let i = 0; i < productsData.products.length; i++) {
+                    const currentProduct = productsData.products[i];
+                    if (
+                        currentProduct.designer.name === designerParam &&
+                        currentProduct.category.name === categoryParam &&
+                        currentProduct.name === nameParam
+                    ) {
                         dispatch({
-                            type: UPDATE_CURRENT_CATEGORY,
-                            payload: category._id,
+                            type: UPDATE_CURRENT_PRODUCT,
+                            payload: currentProduct
                         });
+                        setCurrentProductState(currentProduct);
+                        if (wishlist.find((wishlistProduct) => wishlistProduct._id === currentProduct._id)) {
+                            setIsInWishlistState(true);
+                        }
                     }
-                });
-            } else if (!categoriesLoading) {
-                idbPromise("categories", "get").then((categories) => {
-                    dispatch({
-                        type: UPDATE_CATEGORIES,
-                        payload: categories,
-                    });
-                });
-            } else if (categoriesError) {
-                console.error(categoriesError);
+                }
+                return;
             }
         } catch (error) {
             console.error(error);
         }
-    }, [categoriesData, categoriesLoading, categoriesError, dispatch, categoryParam]);
+    }, [categoryParam, designerParam, dispatch, nameParam, productsData, wishlist]);
 
-    // Get subcategories.
-    useEffect(() => {
-        try {
-            if (subcategoriesData) {
-                dispatch({
-                    type: UPDATE_SUBCATEGORIES,
-                    payload: subcategoriesData.subcategories,
-                });
-                subcategoriesData.subcategories.forEach((subcategory) => {
-                    idbPromise("subcategories", "put", subcategory);
-
-                    if (subcategory.name === subcategoryParam) {
-                        dispatch({
-                            type: UPDATE_CURRENT_SUBCATEGORY,
-                            payload: subcategory._id,
-                        });
-                    }
-                });
-            } else if (!subcategoriesLoading) {
-                idbPromise("subcategories", "get").then((subcategories) => {
-                    dispatch({
-                        type: UPDATE_SUBCATEGORIES,
-                        payload: subcategories,
-                    });
-                });
-            } else if (subcategoriesError) {
-                console.error(subcategoriesError);
-            }
-        } catch (error) {
-            console.error(error);
+    const addToWishlist = () => {
+        if (!Auth.loggedIn()) {
+            return navigate("/account/sign-in");
         }
-    }, [subcategoriesData, subcategoriesLoading, subcategoriesError, dispatch, subcategoryParam]);
+        
+        const productInWishlist = wishlist.find((wishlistProduct) => wishlistProduct._id === currentProductState._id);
+        if (!productInWishlist) {
+            dispatch({
+                type: ADD_TO_WISHLIST,
+                payload: currentProductState
+            });
+            idbPromise("wishlist", "put", currentProductState);
+            console.log(wishlist);
+        };
+    };
 
 
+    const removeFromWishlist = () => {
 
-    const singleProduct = () => {
-        for (let i = 0; i < state.products.length; i++) {
-            const currentProduct = state.products[i];
-            if (
-                currentProduct.designer.name === designerParam &&
-                currentProduct.category.name === categoryParam &&
-                currentProduct.name === nameParam
-            ) {
-                return currentProduct;
-            }
-        }
-        return;
-    }
-
-    function addToWishlist () {
     }
 
     const addToShoppingBag = () => {
@@ -186,53 +129,65 @@ const ProductDetail = (props) => {
     const [quantityState, setQuantityState] = useState(1)
 
     const handleIncrement = () => {
-        return setQuantityState(quantityState+1);
+        return setQuantityState(quantityState + 1);
     };
 
     const handleDecrement = () => {
         if (quantityState > 1) {
-            return setQuantityState(quantityState-1);
+            return setQuantityState(quantityState - 1);
         };
     };
 
     return (
         <section className="main-content-container">
-            {singleProduct() !== undefined && (
-                <div className="product-detail-wrapper">
-                    <div className="product-detail-image">
-                        <img src={require(`../../assets/img/products/${singleProduct().category.name}/${singleProduct().image}.png`)} alt={singleProduct().name} />
-                    </div >
-                    <div className="product-detail-info">
-                        <h3>{singleProduct().designer.name}</h3>
-                        <p className="product-detail-name">{singleProduct().name}</p>
-                        <div className="product-detail-price">
-                            {singleProduct().onSale === true
-                                ? (
-                                    <div className="sale-price-wrapper">
-                                        <span className="original-price">{formatCurrency(singleProduct().price)}</span>
-                                        <span className="sale-price">{formatCurrency(getSalePrice(singleProduct().price))}</span>
-                                    </div>
-                                )
-                                : formatCurrency(singleProduct().price)
-                            }
-                        </div>
-                        <p className="product-detail-color">Color: {singleProduct().color.name}</p>
-                        <div className="product-detail-quantity">
-                            <button className="quantity-input-modifier quantity-input-decrement-button" onClick={handleDecrement}>&minus;</button>
-                            <input className="quantity-input-screen" type="text" value={quantityState} readOnly/>
-                            <button className="quantity-input-modifier quantity-input-increment-button" onClick={handleIncrement}>&#43;</button>
-                        </div>
-                        <div className="product-detail-button-wrapper">
-                            <button className="filled-btn" onClick={addToShoppingBag}>
-                                Add to Bag
-                            </button>
-                            <button className="outlined-btn" onClick={addToWishlist}>
-                                Add to Wish List
-                            </button>
+            {currentProductState
+                ? (
+                    <div className="product-detail-wrapper">
+                        <div className="product-detail-image">
+                            <img src={require(`../../assets/img/products/${currentProductState.category.name}/${currentProductState.image}.png`)} alt={currentProductState.name} />
+                        </div >
+                        <div className="product-detail-info">
+                            <h3>{currentProductState.designer.name}</h3>
+                            <p className="product-detail-name">{currentProductState.name}</p>
+                            <div className="product-detail-price">
+                                {currentProductState.onSale === true
+                                    ? (
+                                        <div className="sale-price-wrapper">
+                                            <span className="original-price">{formatCurrency(currentProductState.price)}</span>
+                                            <span className="sale-price">{formatCurrency(getSalePrice(currentProductState.price))}</span>
+                                        </div>
+                                    )
+                                    : formatCurrency(currentProductState.price)
+                                }
+                            </div>
+                            <p className="product-detail-color">Color: {currentProductState.color.name}</p>
+                            <div className="product-detail-quantity">
+                                <button className="quantity-input-modifier quantity-input-decrement-button" onClick={handleDecrement}>&minus;</button>
+                                <input className="quantity-input-screen" type="text" value={quantityState} readOnly />
+                                <button className="quantity-input-modifier quantity-input-increment-button" onClick={handleIncrement}>&#43;</button>
+                            </div>
+                            <div className="product-detail-button-wrapper">
+                                <button className="filled-btn" onClick={addToShoppingBag}>
+                                    Add to Bag
+                                </button>
+                                {isInWishlistState
+                                    ? (
+                                        <button className="outlined-btn" onClick={removeFromWishlist}>
+                                            Remove from Wish List
+                                        </button>
+                                    )
+                                    : (
+                                        <button className="outlined-btn" onClick={addToWishlist}>
+                                            Add to Wish List
+                                        </button>
+                                    )
+                                }
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
+                )
+                : <NotFound />
+            }
         </section >
     );
 };
