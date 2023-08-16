@@ -11,6 +11,21 @@ export const LOGIN = gql`
   }
 `;
 
+export const ADD_TO_WISHLIST = gql`
+  mutation AddToWishlist(
+    $wishlist: [ID]!
+    ) {
+    addToWishlist(
+      wishlist: $wishlist
+      ) {
+        token
+        user {
+          _id
+        }
+      }
+  }
+`
+
 export const ADD_ORDER = gql`
   mutation AddOrder($products: [ID]!) {
     addOrder(products: $products) {

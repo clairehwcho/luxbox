@@ -83,6 +83,7 @@ export const QUERY_USERS = gql`
       lastName
       email
       password
+      wishlist
       orders {
         _id
         purchaseDate
@@ -126,6 +127,7 @@ export const QUERY_USER = gql`
       lastName
       email
       password
+      wishlist
       orders {
         _id
         purchaseDate

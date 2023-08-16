@@ -325,6 +325,15 @@ main {
   gap: 1rem;
 }
 
+/* --- Wishlist --- */
+.wishlist-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 0;
+}
+
 /* --- Home --- */
 .home-content-container {
   width: 100%;
@@ -501,14 +510,16 @@ main {
 .product-card-column-wrapper {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fill, 47%);
+  grid-template-columns: repeat(auto-fill, 45%);
   grid-gap: 1rem;
+  grid-auto-rows: auto;
   justify-content: space-between;
 }
 
 /* --- ProductCard --- */
 .product-card-column {
   width: 100%;
+  min-height: 100%;
   display: flex;
   justify-content: center;
   transition: all 0.5s ease-in-out;
@@ -530,16 +541,18 @@ main {
 
 .product-card-header img {
   width: 100%;
-  aspect-ratio: 2/3;
 }
 
 .product-card-body {
   width: 100%;
-  height: 20%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+}
 
+.product-card-footer {
+  width: 100%;
 }
 
 .product-card-designer {
@@ -765,6 +778,25 @@ footer ul li:nth-of-type(2):hover {
   .product-card-column-wrapper {
     grid-template-columns: repeat(auto-fill, 31%);
   }
+
+  /* --- ProductDetail --- */
+  .product-detail-wrapper {
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 2rem;
+    padding: 1rem;
+  }
+
+  .product-detail-image {
+    width: 40%;
+  }
+
+  .product-detail-info {
+    width: 40%;
+  }
+
+
 }
 
 @media screen and (min-width: 992px) {
@@ -888,6 +920,11 @@ footer ul li:nth-of-type(2):hover {
     min-height: 50px;
   }
 
+  /* --- Wishlist --- */
+  .wishlist-wrapper .product-card-column-wrapper {
+    grid-template-columns: repeat(auto-fill, 23%);
+  }
+
   /* --- Home --- */
   .just-landed img {
     position: relative;
@@ -934,23 +971,6 @@ footer ul li:nth-of-type(2):hover {
 
   .product-filter-icon-wrapper {
     pointer-events: none;
-  }
-
-  /* --- ProductDetail --- */
-  .product-detail-wrapper {
-    flex-direction: row;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 2rem;
-    padding: 1rem;
-  }
-
-  .product-detail-image {
-    width: 40%;
-  }
-
-  .product-detail-info {
-    width: 40%;
   }
 
   /* --- DesignerList --- */

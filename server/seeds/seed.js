@@ -1,3 +1,4 @@
+import { ObjectId } from "mongoose";
 import db from "../config/connection.js";
 import { User, Product, Category, Subcategory, Color, Designer } from "../models/index.js";
 
@@ -989,11 +990,7 @@ db.once("open", async () => {
                     products: [products[5]._id, products[10]._id, products[25]._id]
                 }
             ],
-            wishlist: [
-                {
-                    products: [products[3]._id, products[19]._id, products[50]._id]
-                }
-            ]
+            wishlist: [products[0]._id, products[30]._id,products[50]._id]
         });
 
         console.log('users seeded');

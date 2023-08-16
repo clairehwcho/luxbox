@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom';
 import { formatCurrency } from '../../utils/helpers';
 
 const ProductCard = (props) => {
-
     return (
         <Link to={`/shop/product/${props.designer}/${props.category}/${props.name}`} className="link" >
             <div className="product-card-column">
@@ -29,6 +28,18 @@ const ProductCard = (props) => {
                             }
                         </div>
                     </div>
+                    {props.isWishlist && (
+                        <div className="product-card-footer">
+                            <div className="product-detail-button-wrapper">
+                                <button className="filled-btn">
+                                    Add to Bag
+                                </button>
+                                <button className="outlined-btn">
+                                    Remove from Wishlist
+                                </button>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div >
         </Link >

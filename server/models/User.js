@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
 import { hash, compare } from "bcrypt";
 import Order from "./Order.js";
+import Wishlist from "./Wishlist.js";
 
 const userSchema = new Schema({
     firstName: {
@@ -27,6 +28,7 @@ const userSchema = new Schema({
         required: [true, "Password is required."],
         minlength: [4, "Password must be at least {MINLENGTH} characters long."]
     },
+    wishlist: [Schema.Types.ObjectId],
     orders: [Order.schema]
 }, { timestamps: true });
 

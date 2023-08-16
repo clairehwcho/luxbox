@@ -1,32 +1,19 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-import { useQuery } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 
-import { QUERY_USER } from '../../utils/queries';
 import { useStoreContext } from '../../utils/GlobalState';
 import Auth from '../../utils/auth';
 
 import {
-    UPDATE_PRODUCTS,
-    UPDATE_CURRENT_PRODUCT,
-    UPDATE_CATEGORIES,
-    UPDATE_CURRENT_CATEGORY,
-    UPDATE_SUBCATEGORIES,
-    UPDATE_CLOTHING_SUBCATEGORIES,
-    UPDATE_SHOES_SUBCATEGORIES,
-    UPDATE_BAGS_SUBCATEGORIES,
-    UPDATE_JEWELRY_AND_ACCESSORIES_SUBCATEGORIES,
-    UPDATE_BEAUTY_SUBCATEGORIES,
-    UPDATE_HOME_SUBCATEGORIES,
-    UPDATE_CURRENT_SUBCATEGORY,
-    ADD_TO_WISHLIST,
+    UPDATE_CURRENT_PRODUCT
 } from '../../utils/actions';
 import {
-    QUERY_PRODUCTS,
-    QUERY_CATEGORIES,
-    QUERY_SUBCATEGORIES,
+    QUERY_USER,
+    QUERY_PRODUCTS
 } from '../../utils/queries';
+import { ADD_TO_WISHLIST } from '../../utils/mutations';
 import { formatCurrency, idbPromise } from '../../utils/helpers';
 import NotFound from '../../components/Product/NotFound';
 
@@ -36,12 +23,18 @@ const ProductDetail = (props) => {
 
     const { designerParam, categoryParam, subcategoryParam, nameParam } = useParams();
 
+
+
     const [state, dispatch] = useStoreContext();
 
     const { products, shoppingBag, wishlist } = state;
 
+    const { data: userData, loading: userLoading } = useQuery(QUERY_USER);
     const { loading: productsLoading, error: productsError, data: productsData } = useQuery(QUERY_PRODUCTS);
 
+    const [addToWishlist, { loading, error }] = useMutation(ADD_TO_WISHLIST);
+
+    const user = userData?.user || {};
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -71,21 +64,65 @@ const ProductDetail = (props) => {
         }
     }, [categoryParam, designerParam, dispatch, nameParam, productsData, wishlist]);
 
-    const addToWishlist = () => {
+
+    const handleWishlistButtonText = () => {
+        if (!Auth.loggedIn()) {
+            return "Add to Wishlist";
+        }
+        else if (!userLoading) {
+            if (user.wishlist.includes(currentProductState._id)) {
+                return "Remove from Wishlist";
+            }
+            else {
+                return "Add to Wishlist";
+            }
+        };
+    };
+
+    const handleWishlistButtonClick = async (e) => {
+        e.preventDefault();
+
+        const button = e.target;
+
         if (!Auth.loggedIn()) {
             return navigate("/account/sign-in");
         }
-        
-        const productInWishlist = wishlist.find((wishlistProduct) => wishlistProduct._id === currentProductState._id);
-        if (!productInWishlist) {
-            dispatch({
-                type: ADD_TO_WISHLIST,
-                payload: currentProductState
-            });
-            idbPromise("wishlist", "put", currentProductState);
-            console.log(wishlist);
-        };
-    };
+
+        if (button.innerText === "Add to Wishlist") {
+            try {
+                await addToWishlist({
+                    variables: { ...{ wishlist: currentProductState._id } }
+                })
+            }
+            catch (error) {
+                console.error(error);
+            };
+        }
+        else if (button.innerText === "Remove from Wishlist") {
+            console.log("test2")
+        }
+    }
+
+    // const handleAddToWishlistClick = async () => {
+    //     if (!Auth.loggedIn()) {
+    //         return navigate("/account/sign-in");
+    //     }
+
+    //     try {
+    //         await addToWishlist({
+    //             variables: { ...currentProductState._id }
+    //         })
+    //     } catch (error) {
+    //         console.error(error);
+    // const productInWishlist = wishlist.find((wishlistProduct) => wishlistProduct._id === currentProductState._id);
+    // if (!productInWishlist) {
+    //     dispatch({
+    //         type: ADD_TO_WISHLIST,
+    //         payload: currentProductState
+    //     });
+    //     idbPromise("wishlist", "put", currentProductState);
+    // };
+    // };
 
 
     const removeFromWishlist = () => {
@@ -170,18 +207,9 @@ const ProductDetail = (props) => {
                                 <button className="filled-btn" onClick={addToShoppingBag}>
                                     Add to Bag
                                 </button>
-                                {isInWishlistState
-                                    ? (
-                                        <button className="outlined-btn" onClick={removeFromWishlist}>
-                                            Remove from Wish List
-                                        </button>
-                                    )
-                                    : (
-                                        <button className="outlined-btn" onClick={addToWishlist}>
-                                            Add to Wish List
-                                        </button>
-                                    )
-                                }
+                                <button className="outlined-btn" onClick={handleWishlistButtonClick}>
+                                    {handleWishlistButtonText()}
+                                </button>
                             </div>
                         </div>
                     </div>
