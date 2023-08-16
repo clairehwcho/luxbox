@@ -1,7 +1,6 @@
 import { Schema, model } from "mongoose";
 import { hash, compare } from "bcrypt";
 import Order from "./Order.js";
-import Wishlist from "./Wishlist.js";
 
 const userSchema = new Schema({
     firstName: {

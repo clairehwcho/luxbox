@@ -446,6 +446,7 @@ const ProductList = (props) => {
                                             return (
                                                 <ProductCard
                                                     key={i}
+                                                    _id={product._id}
                                                     image={product.image}
                                                     designer={product.designer.name}
                                                     category={product.category.name}

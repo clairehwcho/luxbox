@@ -79,15 +79,6 @@ const resolvers = {
 
             throw new AuthenticationError('Not logged in');
         },
-        wishlist: async (parent, { _id }, context) => {
-            if (context.user) {
-                const user = await User.findById(context.user._id).populate({
-                    path: 'wishlist.products',
-                    populate: 'category'
-                });
-                return user.wishlist.id(_id);
-            }
-        },
         order: async (parent, { _id }, context) => {
             if (context.user) {
                 const user = await User.findById(context.user._id).populate({
@@ -150,10 +141,9 @@ const resolvers = {
             return { token, user };
 
         },
-        addToWishlist: async (parent, productId, context) => {
+        addToWishlist: async (parent, { wishlist }, context) => {
             if (context.user) {
-                console.log(productId);
-                const user = await User.findByIdAndUpdate(context.user._id, { $push: { wishlist: productId } });
+                const user = await User.findByIdAndUpdate(context.user._id, { $push: { wishlist: wishlist } });
 
                 const token = signToken(user);
 
@@ -162,6 +152,18 @@ const resolvers = {
 
             throw new AuthenticationError('Not logged in');
         },
+        removeFromWishlist: async (parent, { wishlist }, context) => {
+            if (context.user) {
+                const user = await User.findByIdAndUpdate(context.user._id, { $pull: { wishlist: wishlist } });
+
+                const token = signToken(user);
+
+                return { token, user };
+            }
+
+            throw new AuthenticationError('Not logged in');
+        },
+
         addOrder: async (parent, { products }, context) => {
             if (context.user) {
                 const order = new Order({ products });

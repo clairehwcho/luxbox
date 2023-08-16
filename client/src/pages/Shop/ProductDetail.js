@@ -6,35 +6,34 @@ import { useQuery, useMutation } from '@apollo/client';
 import { useStoreContext } from '../../utils/GlobalState';
 import Auth from '../../utils/auth';
 
-import {
-    UPDATE_CURRENT_PRODUCT
-} from '../../utils/actions';
-import {
-    QUERY_USER,
-    QUERY_PRODUCTS
-} from '../../utils/queries';
-import { ADD_TO_WISHLIST } from '../../utils/mutations';
-import { formatCurrency, idbPromise } from '../../utils/helpers';
+import { UPDATE_CURRENT_PRODUCT } from '../../utils/actions';
+import { QUERY_USER, QUERY_PRODUCTS } from '../../utils/queries';
+import { ADD_TO_WISHLIST, REMOVE_FROM_WISHLIST } from '../../utils/mutations';
+import { formatCurrency } from '../../utils/helpers';
 import NotFound from '../../components/Product/NotFound';
 
 const ProductDetail = (props) => {
     const [currentProductState, setCurrentProductState] = useState();
     const [isInWishlistState, setIsInWishlistState] = useState(false);
 
-    const { designerParam, categoryParam, subcategoryParam, nameParam } = useParams();
-
-
+    const { designerParam, categoryParam, nameParam } = useParams();
 
     const [state, dispatch] = useStoreContext();
-
     const { products, shoppingBag, wishlist } = state;
 
-    const { data: userData, loading: userLoading } = useQuery(QUERY_USER);
+    const { loading: userLoading, error: userError, data: userData } = useQuery(QUERY_USER);
     const { loading: productsLoading, error: productsError, data: productsData } = useQuery(QUERY_PRODUCTS);
 
-    const [addToWishlist, { loading, error }] = useMutation(ADD_TO_WISHLIST);
+    const [addToWishlist, { loading: addToWishlistLoading, error: addToWishlistError }] = useMutation(ADD_TO_WISHLIST, {
+        refetchQueries: [QUERY_USER, "GetUser"]
+    });
+
+    const [removeFromWishlist, { loading: removeFromWishlistLoading, error: removeFromWishlistError }] = useMutation(REMOVE_FROM_WISHLIST, {
+        refetchQueries: [QUERY_USER, "GetUser"]
+    });
 
     const user = userData?.user || {};
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -70,6 +69,12 @@ const ProductDetail = (props) => {
             return "Add to Wishlist";
         }
         else if (!userLoading) {
+            if (addToWishlistLoading) {
+                return "Adding...";
+            }
+            if (removeFromWishlistLoading) {
+                return "Removing...";
+            }
             if (user.wishlist.includes(currentProductState._id)) {
                 return "Remove from Wishlist";
             }
@@ -91,7 +96,9 @@ const ProductDetail = (props) => {
         if (button.innerText === "Add to Wishlist") {
             try {
                 await addToWishlist({
-                    variables: { ...{ wishlist: currentProductState._id } }
+                    variables: {
+                        wishlist: currentProductState._id
+                    }
                 })
             }
             catch (error) {
@@ -99,35 +106,19 @@ const ProductDetail = (props) => {
             };
         }
         else if (button.innerText === "Remove from Wishlist") {
-            console.log("test2")
+            try {
+                await removeFromWishlist({
+                    variables: {
+                        wishlist: currentProductState._id
+                    }
+                })
+            }
+            catch (error) {
+                console.error(error);
+            };
         }
     }
 
-    // const handleAddToWishlistClick = async () => {
-    //     if (!Auth.loggedIn()) {
-    //         return navigate("/account/sign-in");
-    //     }
-
-    //     try {
-    //         await addToWishlist({
-    //             variables: { ...currentProductState._id }
-    //         })
-    //     } catch (error) {
-    //         console.error(error);
-    // const productInWishlist = wishlist.find((wishlistProduct) => wishlistProduct._id === currentProductState._id);
-    // if (!productInWishlist) {
-    //     dispatch({
-    //         type: ADD_TO_WISHLIST,
-    //         payload: currentProductState
-    //     });
-    //     idbPromise("wishlist", "put", currentProductState);
-    // };
-    // };
-
-
-    const removeFromWishlist = () => {
-
-    }
 
     const addToShoppingBag = () => {
         // const itemInShoppingBag = shoppingBag.find((shoppingBagItem) => shoppingBagItem._id === id);

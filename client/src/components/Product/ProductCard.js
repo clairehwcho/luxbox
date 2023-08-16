@@ -1,11 +1,32 @@
-import { Link } from 'react-router-dom';
-import { formatCurrency } from '../../utils/helpers';
+import { Link } from "react-router-dom";
+import { useMutation } from "@apollo/client";
+import { REMOVE_FROM_WISHLIST } from "../../utils/mutations";
+import { QUERY_USER } from "../../utils/queries";
+import { formatCurrency } from "../../utils/helpers";
 
 const ProductCard = (props) => {
+    const [removeFromWishlist, { loading: removeFromWishlistLoading, error: removeFromWishlistError }] = useMutation(REMOVE_FROM_WISHLIST, {
+        refetchQueries: [QUERY_USER, "GetUser"]
+    });
+
+    const handleRemoveFromWishlistButtonClick = async () => {
+        try {
+            await removeFromWishlist({
+                variables: {
+                    wishlist: props._id
+                }
+            })
+        }
+        catch (error) {
+            console.error(error);
+        };
+
+    }
+
     return (
-        <Link to={`/shop/product/${props.designer}/${props.category}/${props.name}`} className="link" >
-            <div className="product-card-column">
-                <div className="product-card">
+        <div className="product-card-column">
+            <div className="product-card">
+                <Link to={`/shop/product/${props.designer}/${props.category}/${props.name}`} className="link" >
                     <div className="product-card-header">
                         <img src={require(`../../assets/img/products/${props.category}/${props.image}.png`)} alt={props.name} />
                     </div>
@@ -28,21 +49,21 @@ const ProductCard = (props) => {
                             }
                         </div>
                     </div>
-                    {props.isWishlist && (
-                        <div className="product-card-footer">
-                            <div className="product-detail-button-wrapper">
-                                <button className="filled-btn">
-                                    Add to Bag
-                                </button>
-                                <button className="outlined-btn">
-                                    Remove from Wishlist
-                                </button>
-                            </div>
+                </Link >
+                {props.isWishlist && (
+                    <div className="product-card-footer">
+                        <div className="product-detail-button-wrapper">
+                            <button className="filled-btn">
+                                Add to Bag
+                            </button>
+                            <button className="outlined-btn" onClick={handleRemoveFromWishlistButtonClick}>
+                                Remove from Wishlist
+                            </button>
                         </div>
-                    )}
-                </div>
-            </div >
-        </Link >
+                    </div>
+                )}
+            </div>
+        </div >
     )
 };
 

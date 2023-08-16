@@ -1,3 +1,4 @@
+// These actions are used for useReducer hook that creates Provider component.
 export const UPDATE_PRODUCTS = "UPDATE_PRODUCTS";
 export const UPDATE_CURRENT_PRODUCT = "UPDATE_CURRENT_PRODUCT";
 

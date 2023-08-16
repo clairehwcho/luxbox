@@ -13,7 +13,7 @@ export const LOGIN = gql`
 
 export const ADD_TO_WISHLIST = gql`
   mutation AddToWishlist(
-    $wishlist: [ID]!
+    $wishlist: ID!
     ) {
     addToWishlist(
       wishlist: $wishlist
@@ -23,6 +23,21 @@ export const ADD_TO_WISHLIST = gql`
           _id
         }
       }
+  }
+`
+
+export const REMOVE_FROM_WISHLIST = gql`
+  mutation RemoveFromWishlist(
+    $wishlist: ID!
+  ) {
+    removeFromWishlist(
+      wishlist: $wishlist
+    ) {
+      token
+      user {
+        _id
+      }
+    }
   }
 `
 
