@@ -1,19 +1,54 @@
 import { Link } from "react-router-dom";
 import { useMutation } from "@apollo/client";
-import { REMOVE_FROM_WISHLIST } from "../../utils/mutations";
+import Auth from "../../utils/auth";
+import { ADD_TO_SHOPPING_BAG, REMOVE_FROM_WISHLIST } from "../../utils/mutations";
 import { QUERY_USER } from "../../utils/queries";
 import { formatCurrency } from "../../utils/helpers";
 
 const ProductCard = (props) => {
+    const [addToShoppingBag, { loading: addToShoppingBagLoading, error: addToShoppingBagError }] = useMutation(ADD_TO_SHOPPING_BAG, {
+        refetchQueries: [QUERY_USER, "GetUser"]
+    });
     const [removeFromWishlist, { loading: removeFromWishlistLoading, error: removeFromWishlistError }] = useMutation(REMOVE_FROM_WISHLIST, {
         refetchQueries: [QUERY_USER, "GetUser"]
     });
+
+    // Handle Shopping bag button.
+    const handleShoppingBagButtonText = () => {
+        if (addToShoppingBagLoading) {
+            return "Adding...";
+        }
+        else {
+            return "Add to Bag";
+        }
+    };
+
+    const handleShoppingBagButtonClick = async (e) => {
+        e.preventDefault();
+
+        const button = e.target;
+
+        if (button.innerText === "Add to Bag") {
+            try {
+                await addToShoppingBag({
+                    variables: {
+                        productId: props._id
+                    }
+                })
+            }
+            catch (error) {
+                console.error(error);
+            };
+        }
+        else if (button.innerText === "Added to Bag") {
+        }
+    }
 
     const handleRemoveFromWishlistButtonClick = async () => {
         try {
             await removeFromWishlist({
                 variables: {
-                    wishlist: props._id
+                    productId: props._id
                 }
             })
         }
@@ -53,8 +88,8 @@ const ProductCard = (props) => {
                 {props.isWishlist && (
                     <div className="product-card-footer">
                         <div className="product-detail-button-wrapper">
-                            <button className="filled-btn">
-                                Add to Bag
+                            <button className="filled-btn" onClick={handleShoppingBagButtonClick}>
+                                {handleShoppingBagButtonText()}
                             </button>
                             <button className="outlined-btn" onClick={handleRemoveFromWishlistButtonClick}>
                                 Remove from Wishlist

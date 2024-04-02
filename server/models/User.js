@@ -27,6 +27,16 @@ const userSchema = new Schema({
         required: [true, "Password is required."],
         minlength: [4, "Password must be at least {MINLENGTH} characters long."]
     },
+    shoppingBag: [{
+        productId: {
+            type: Schema.Types.ObjectId
+        },
+        quantity: {
+            type: Number,
+            min: 1,
+            default: 1
+        }
+    }],
     wishlist: [Schema.Types.ObjectId],
     orders: [Order.schema]
 }, { timestamps: true });

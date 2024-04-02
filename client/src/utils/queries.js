@@ -83,6 +83,10 @@ export const QUERY_USERS = gql`
       lastName
       email
       password
+      shoppingBag {
+        productId
+        quantity
+      }
       wishlist
       orders {
         _id
@@ -127,6 +131,10 @@ export const QUERY_USER = gql`
       lastName
       email
       password
+      shoppingBag {
+        productId
+        quantity
+      }
       wishlist
       orders {
         _id

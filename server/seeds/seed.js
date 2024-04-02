@@ -985,12 +985,22 @@ db.once("open", async () => {
             lastName: 'Cho',
             email: 'guest@gmail.com',
             password: '1234',
+            shoppingBag: [
+                {
+                    productId: products[13]._id,
+                    quantity: 1
+                },
+                {
+                    productId: products[25]._id,
+                    quantity: 1
+                }
+            ],
+            wishlist: [products[0]._id, products[30]._id, products[50]._id],
             orders: [
                 {
                     products: [products[5]._id, products[10]._id, products[25]._id]
                 }
-            ],
-            wishlist: [products[0]._id, products[30]._id,products[50]._id]
+            ]
         });
 
         console.log('users seeded');

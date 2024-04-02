@@ -141,6 +141,29 @@ const resolvers = {
             return { token, user };
 
         },
+        addToShoppingBag: async (parent, { shoppingBag }, context) => {
+            console.log(shoppingBag)
+            if (context.user) {
+                const user = await User.findByIdAndUpdate(context.user._id, { $push: { shoppingBag: shoppingBag } });
+
+                const token = signToken(user);
+
+                return { token, user };
+            }
+
+            throw new AuthenticationError('Not logged in');
+        },
+        removeFromShoppingBag: async (parent, { shoppingBag }, context) => {
+            if (context.user) {
+                const user = await User.findByIdAndUpdate(context.user._id, { $pull: { shoppingBag: { productId: shoppingBag.productId } } });
+
+                const token = signToken(user);
+
+                return { token, user };
+            }
+
+            throw new AuthenticationError('Not logged in');
+        },
         addToWishlist: async (parent, { wishlist }, context) => {
             if (context.user) {
                 const user = await User.findByIdAndUpdate(context.user._id, { $push: { wishlist: wishlist } });
@@ -163,7 +186,6 @@ const resolvers = {
 
             throw new AuthenticationError('Not logged in');
         },
-
         addOrder: async (parent, { products }, context) => {
             if (context.user) {
                 const order = new Order({ products });

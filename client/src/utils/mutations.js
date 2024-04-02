@@ -11,27 +11,63 @@ export const LOGIN = gql`
   }
 `;
 
-export const ADD_TO_WISHLIST = gql`
-  mutation AddToWishlist(
-    $wishlist: ID!
+export const ADD_TO_SHOPPING_BAG = gql`
+  mutation AddToShoppingBag(
+    $productId: ID!,
+    $quantity: Int!
     ) {
-    addToWishlist(
-      wishlist: $wishlist
-      ) {
-        token
-        user {
-          _id
+      addToShoppingBag(
+        shoppingBag: {
+          productId: $productId,
+          quantity: $quantity
+        }
+        ) {
+          token
+          user {
+            _id
+          }
         }
       }
+`;
+
+export const REMOVE_FROM_SHOPPING_BAG = gql`
+  mutation RemoveFromShoppingBag(
+    $productId: ID!
+  ) {
+    removeFromShoppingBag(
+      shoppingBag: {
+        productId: $productId
+      }
+      ) {
+      token
+      user {
+        _id
+      }
+    }
   }
-`
+`;
+
+export const ADD_TO_WISHLIST = gql`
+  mutation AddToWishlist(
+    $productId: ID!
+    ) {
+      addToWishlist(
+        wishlist: $productId
+        ) {
+          token
+          user {
+            _id
+          }
+        }
+      }
+`;
 
 export const REMOVE_FROM_WISHLIST = gql`
   mutation RemoveFromWishlist(
-    $wishlist: ID!
+    $productId: ID!
   ) {
     removeFromWishlist(
-      wishlist: $wishlist
+      wishlist: $productId
     ) {
       token
       user {
@@ -39,7 +75,7 @@ export const REMOVE_FROM_WISHLIST = gql`
       }
     }
   }
-`
+`;
 
 export const ADD_ORDER = gql`
   mutation AddOrder($products: [ID]!) {

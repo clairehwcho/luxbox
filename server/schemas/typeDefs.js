@@ -45,12 +45,18 @@ const typeDefs = gql`
     products: [Product]
   }
 
+  type ShoppingBag {
+    productId: ID
+    quantity: Int
+  }
+
   type User {
     _id: ID
     firstName: String
     lastName: String
     email: String
     password: String
+    shoppingBag: [ShoppingBag]
     wishlist: [ID]
     orders: [Order]
   }
@@ -75,6 +81,7 @@ const typeDefs = gql`
     product(_id: ID!): Product
     users: [User]
     user: User
+    shoppingBag: [ShoppingBag]
     wishlist: [ID]
     order(_id: ID!): Order
     checkout(products: [ID]!): Checkout
@@ -84,8 +91,10 @@ const typeDefs = gql`
   type Mutation {
     # Set the required fields
     addUser(firstName: String!, lastName: String!, email: String!, password: String!): Auth
-    addToWishlist(wishlist:ID): Auth
-    removeFromWishlist(wishlist:ID): Auth
+    addToShoppingBag(productId:ID!, quantity:Int!): Auth
+    removeFromShoppingBag(productId:ID): Auth
+    addToWishlist(wishlist:ID!): Auth
+    removeFromWishlist(wishlist:ID!): Auth
     addOrder(products: [ID]!): Order
     updateUser(_id: ID!, firstName: String!, lastName: String!, email: String!, password: String!): Auth
     updateProduct(_id: ID!, quantity: Int!): Product

@@ -8,13 +8,13 @@ import Auth from '../../utils/auth';
 
 import { UPDATE_CURRENT_PRODUCT } from '../../utils/actions';
 import { QUERY_USER, QUERY_PRODUCTS } from '../../utils/queries';
-import { ADD_TO_WISHLIST, REMOVE_FROM_WISHLIST } from '../../utils/mutations';
+import { ADD_TO_SHOPPING_BAG, ADD_TO_WISHLIST, REMOVE_FROM_WISHLIST } from '../../utils/mutations';
 import { formatCurrency } from '../../utils/helpers';
 import NotFound from '../../components/Product/NotFound';
 
 const ProductDetail = (props) => {
     const [currentProductState, setCurrentProductState] = useState();
-    const [isInWishlistState, setIsInWishlistState] = useState(false);
+    const [quantityState, setQuantityState] = useState(1)
 
     const { designerParam, categoryParam, nameParam } = useParams();
 
@@ -25,6 +25,10 @@ const ProductDetail = (props) => {
     const { loading: productsLoading, error: productsError, data: productsData } = useQuery(QUERY_PRODUCTS);
 
     const [addToWishlist, { loading: addToWishlistLoading, error: addToWishlistError }] = useMutation(ADD_TO_WISHLIST, {
+        refetchQueries: [QUERY_USER, "GetUser"]
+    });
+
+    const [addToShoppingBag, { loading: addToShoppingBagLoading, error: addToShoppingBagError }] = useMutation(ADD_TO_SHOPPING_BAG, {
         refetchQueries: [QUERY_USER, "GetUser"]
     });
 
@@ -51,9 +55,6 @@ const ProductDetail = (props) => {
                             payload: currentProduct
                         });
                         setCurrentProductState(currentProduct);
-                        if (wishlist.find((wishlistProduct) => wishlistProduct._id === currentProduct._id)) {
-                            setIsInWishlistState(true);
-                        }
                     }
                 }
                 return;
@@ -64,6 +65,51 @@ const ProductDetail = (props) => {
     }, [categoryParam, designerParam, dispatch, nameParam, productsData, wishlist]);
 
 
+    // Handle Shopping bag button.
+    const handleShoppingBagButtonText = () => {
+        if (!Auth.loggedIn()) {
+            return "Add to Bag";
+        }
+        else if (!userLoading) {
+            if (addToShoppingBagLoading) {
+                return "Adding...";
+            }
+            if (user.shoppingBag.includes(currentProductState._id)) {
+                return "Added to Bag";
+            }
+            else {
+                return "Add to Bag";
+            }
+        };
+    };
+
+    const handleShoppingBagButtonClick = async (e) => {
+        e.preventDefault();
+
+        const button = e.target;
+
+        if (!Auth.loggedIn()) {
+            return navigate("/account/sign-in");
+        }
+
+        if (button.innerText === "Add to Bag") {
+            try {
+                await addToShoppingBag({
+                    variables: {
+                        productId: currentProductState._id,
+                        quantity: quantityState
+                    }
+                })
+            }
+            catch (error) {
+                console.error(error);
+            };
+        }
+        else if (button.innerText === "Added to Bag") {
+        }
+    }
+
+    // Handle wishlist button.
     const handleWishlistButtonText = () => {
         if (!Auth.loggedIn()) {
             return "Add to Wishlist";
@@ -97,7 +143,7 @@ const ProductDetail = (props) => {
             try {
                 await addToWishlist({
                     variables: {
-                        wishlist: currentProductState._id
+                        productId: currentProductState._id
                     }
                 })
             }
@@ -109,7 +155,7 @@ const ProductDetail = (props) => {
             try {
                 await removeFromWishlist({
                     variables: {
-                        wishlist: currentProductState._id
+                        productId: currentProductState._id
                     }
                 })
             }
@@ -119,43 +165,11 @@ const ProductDetail = (props) => {
         }
     }
 
-
-    const addToShoppingBag = () => {
-        // const itemInShoppingBag = shoppingBag.find((shoppingBagItem) => shoppingBagItem._id === id);
-        // if (itemInShoppingBag) {
-        //     dispatch({
-        //         type: UPDATE_CART_QUANTITY,
-        //         _id: id,
-        //         purchaseQuantity: parseInt(itemInShoppingBag.purchaseQuantity) + 1,
-        //     });
-        //     idbPromise('shoppingBag', 'put', {
-        //         ...itemInShoppingBag,
-        //         purchaseQuantity: parseInt(itemInShoppingBag.purchaseQuantity) + 1,
-        //     });
-        // } else {
-        //     dispatch({
-        //         type: ADD_TO_CART,
-        //         product: { ...currentProduct, purchaseQuantity: 1 },
-        //     });
-        //     idbPromise('shoppingBag', 'put', { ...currentProduct, purchaseQuantity: 1 });
-        // }
-    };
-
-    // const removeFromShoppingBag = () => {
-    //     dispatch({
-    //         type: REMOVE_FROM_CART,
-    //         _id: currentProduct._id,
-    //     });
-
-    //     idbPromise('shoppingBag', 'delete', { ...currentProduct });
-
     const getSalePrice = (price) => {
         return (Math.ceil(price * 0.8));
     };
 
     // Handle quantity input
-    const [quantityState, setQuantityState] = useState(1)
-
     const handleIncrement = () => {
         return setQuantityState(quantityState + 1);
     };
@@ -195,8 +209,8 @@ const ProductDetail = (props) => {
                                 <button className="quantity-input-modifier quantity-input-increment-button" onClick={handleIncrement}>&#43;</button>
                             </div>
                             <div className="product-detail-button-wrapper">
-                                <button className="filled-btn" onClick={addToShoppingBag}>
-                                    Add to Bag
+                                <button className="filled-btn" onClick={handleShoppingBagButtonClick}>
+                                    {handleShoppingBagButtonText()}
                                 </button>
                                 <button className="outlined-btn" onClick={handleWishlistButtonClick}>
                                     {handleWishlistButtonText()}
