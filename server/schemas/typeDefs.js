@@ -1,6 +1,9 @@
-import { gql } from 'apollo-server-express';
+import { ApolloServer } from '@apollo/server';
 
-const typeDefs = gql`
+// A schema is a collection of type definitions (hence "typeDefs")
+// that together define the "shape" of queries that are executed against your data.
+const typeDefs = `#graphql
+  # Adding #graphql to the beginning of a template literal provides GraphQL syntax highlighting in supporting IDEs.
   # Define which fields are accessible from the model
 
   type Category {

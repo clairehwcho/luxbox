@@ -1,4 +1,4 @@
-import { AuthenticationError } from "apollo-server-express";
+import { GraphQLError } from 'graphql';
 import { User, Product, Category, Subcategory, Color, Designer, Order } from "../models/index.js";
 import { signToken } from "../utils/auth.js";
 import path from "path";
@@ -77,7 +77,7 @@ const resolvers = {
                 return user;
             }
 
-            throw new AuthenticationError('Not logged in');
+            throw new GraphQLError('Not logged in');
         },
         order: async (parent, { _id }, context) => {
             if (context.user) {
@@ -89,7 +89,7 @@ const resolvers = {
                 return user.orders.id(_id);
             }
 
-            throw new AuthenticationError('Not logged in');
+            throw new GraphQLError('Not logged in');
         },
         checkout: async (parent, args, context) => {
             const url = new URL(context.headers.referer).origin;
@@ -151,7 +151,7 @@ const resolvers = {
                 return { token, user };
             }
 
-            throw new AuthenticationError('Not logged in');
+            throw new GraphQLError('Not logged in');
         },
         removeFromShoppingBag: async (parent, { shoppingBag }, context) => {
             if (context.user) {
@@ -162,7 +162,7 @@ const resolvers = {
                 return { token, user };
             }
 
-            throw new AuthenticationError('Not logged in');
+            throw new GraphQLError('Not logged in');
         },
         addToWishlist: async (parent, { wishlist }, context) => {
             if (context.user) {
@@ -173,7 +173,7 @@ const resolvers = {
                 return { token, user };
             }
 
-            throw new AuthenticationError('Not logged in');
+            throw new GraphQLError('Not logged in');
         },
         removeFromWishlist: async (parent, { wishlist }, context) => {
             if (context.user) {
@@ -184,7 +184,7 @@ const resolvers = {
                 return { token, user };
             }
 
-            throw new AuthenticationError('Not logged in');
+            throw new GraphQLError('Not logged in');
         },
         addOrder: async (parent, { products }, context) => {
             if (context.user) {
@@ -195,7 +195,7 @@ const resolvers = {
                 return order;
             }
 
-            throw new AuthenticationError('Not logged in');
+            throw new GraphQLError('Not logged in');
         },
         updateUser: async (parent, args, context) => {
             if (context.user) {
@@ -206,7 +206,7 @@ const resolvers = {
                 return { token, user };
             }
 
-            throw new AuthenticationError('Not logged in');
+            throw new GraphQLError('Not logged in');
         },
         updateProduct: async (parent, { _id, quantity }) => {
             const decrement = Math.abs(quantity) * -1;
@@ -219,7 +219,7 @@ const resolvers = {
 
             // If there is no user with that email address, return an Authentication error stating so
             if (!user) {
-                throw new AuthenticationError('Incorrect credentials');
+                throw new GraphQLError('Incorrect credentials');
             }
 
             // If there is a user found, execute the `isCorrectPassword` instance method and check if the correct password was provided
@@ -227,7 +227,7 @@ const resolvers = {
 
             // If the password is incorrect, return an Authentication error stating so
             if (!correctPw) {
-                throw new AuthenticationError('Incorrect credentials');
+                throw new GraphQLError('Incorrect credentials');
             }
 
             // If email and password are correct, sign user into the application with a JWT
