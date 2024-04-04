@@ -5,36 +5,44 @@ import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import cors from 'cors';
 import { authMiddleware } from './utils/auth.js';
-import db from './config/connection.js';
+import { getConnection } from './config/connection.js';
 import { typeDefs, resolvers } from './schemas/index.js';
 
+// Configuration
 const PORT = process.env.PORT || 3001;
+const CLIENT_BUILD_PATH = path.join(path.dirname(fileURLToPath(import.meta.url)), '../client/build');
 
+// Express app setup
 const app = express();
 
+// Middlewares to handle incoming requests such as form and JSON data.
+app.use(cors());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
+// Middleware to serve static files.
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+app.use(express.static(CLIENT_BUILD_PATH));
+
+// Apollo Server setup
 const server = new ApolloServer({
     typeDefs,
     resolvers,
 });
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
+// Routes setup
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/build/index.html'));
+    res.sendFile(path.join(CLIENT_BUILD_PATH, 'index.html'));
+});
+app.get('*', (req, res) => {
+    res.sendFile(path.join(CLIENT_BUILD_PATH, 'index.html'));
 });
 
-db.once('open', () => {
-    startApolloServer()
-});
-
+// Apollo Server middleware
 const startApolloServer = async () => {
     await server.start();
     app.use(
         '/graphql',
-        cors(),
-        express.urlencoded({ extended: false }),
-        express.json(),
         expressMiddleware(server, {
             context: authMiddleware,
         }),
@@ -45,9 +53,12 @@ const startApolloServer = async () => {
     });
 }
 
-if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '../client/build')));
-    app.get('*', (req, res) => {
-        res.sendFile(path.join(__dirname, '../client/build/index.html'));
-    });
-}
+// MongoDB connection and server startup
+(async () => {
+    try {
+        await getConnection();
+        await startApolloServer();
+    } catch (error) {
+        console.error('Error establishing MongoDB connection:', error);
+    }
+})();
